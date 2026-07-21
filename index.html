@@ -161,7 +161,7 @@ body.scrolled .controls {
 .timeline {
   background:#0e0e0e;
   border-bottom:1px solid var(--border);
-  padding:.26rem 1.4rem .30rem;
+  padding:.34rem 1.4rem .36rem;
   overflow:hidden;
   transition:max-height .24s ease, padding .24s ease, opacity .18s ease, border-color .24s ease;
 }
@@ -171,42 +171,42 @@ body.timeline-hidden .timeline {
 }
 .timeline-head {
   display:flex; justify-content:space-between; align-items:center; gap:.75rem;
-  font-size:.62rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
-  margin-bottom:.02rem;
+  font-size:.72rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
+  margin-bottom:.10rem;
 }
 .timeline-head strong { color:var(--orange2); font-family:'JetBrains Mono',monospace; letter-spacing:.03em; }
 .timeline-track {
-  position:relative; height:66px; margin:0 2.2rem;
+  position:relative; height:88px; margin:0 2.5rem;
 }
 .timeline-track::before {
-  content:''; position:absolute; left:0; right:0; top:33px; height:3px;
+  content:''; position:absolute; left:0; right:0; top:44px; height:4px;
   background:#252525; border-radius:999px;
 }
 .timeline-fill {
-  position:absolute; left:0; top:33px; height:3px; width:0;
+  position:absolute; left:0; top:44px; height:4px; width:0;
   background:linear-gradient(90deg,var(--orange),var(--gold)); border-radius:999px;
   box-shadow:0 0 12px rgba(255,122,0,.25);
 }
-.tl-marker { position:absolute; top:0; transform:translateX(-50%); height:66px; min-width:24px; }
+.tl-marker { position:absolute; top:0; transform:translateX(-50%); height:88px; min-width:28px; }
 .tl-marker.edge-left { transform:translateX(0); }
 .tl-marker.edge-right { transform:translateX(-100%); }
 .tl-dot {
-  position:absolute; left:50%; top:23px; transform:translateX(-50%);
-  width:21px; height:21px; display:flex; align-items:center; justify-content:center;
-  font-size:.82rem; line-height:1; border-radius:50%; background:#151515;
+  position:absolute; left:50%; top:32px; transform:translateX(-50%);
+  width:25px; height:25px; display:flex; align-items:center; justify-content:center;
+  font-size:.98rem; line-height:1; border-radius:50%; background:#151515;
   border:1px solid var(--border2); box-shadow:0 0 8px rgba(0,0,0,.55);
 }
 .edge-left .tl-dot { left:0; transform:none; }
 .edge-right .tl-dot { left:auto; right:0; transform:none; }
 .tl-label {
   position:absolute; left:50%; transform:translateX(-50%);
-  white-space:normal; min-width:38px; max-width:64px; font-size:.42rem; line-height:1.05;
+  white-space:normal; min-width:46px; max-width:82px; font-size:.58rem; line-height:1.08;
   color:var(--muted); letter-spacing:.01em; text-align:center; overflow-wrap:normal;
 }
 .edge-left .tl-label { left:0; transform:none; text-align:left; }
 .edge-right .tl-label { left:auto; right:0; transform:none; text-align:right; }
-.tl-below .tl-label { top:48px; }
-.tl-above .tl-label { top:1px; }
+.tl-below .tl-label { top:64px; }
+.tl-above .tl-label { top:2px; }
 .tl-start .tl-dot { color:var(--text2); }
 .tl-current .tl-dot { border-color:rgba(46,204,113,.8); box-shadow:0 0 0 1px rgba(46,204,113,.55), 0 0 12px rgba(46,204,113,.45); }
 .tl-current .tl-label { color:var(--green); font-weight:700; }
@@ -566,15 +566,17 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   .controls { padding:.42rem .55rem; max-height:54px; }
   .search-box { font-size:.92rem; padding:.38rem .65rem; }
 
-  .timeline { padding:.22rem .55rem .24rem; }
-  .timeline-head { font-size:.55rem; }
-  .timeline-track { height:54px; margin:0 1.05rem; }
-  .timeline-track::before, .timeline-fill { top:27px; }
-  .tl-marker { height:54px; }
-  .tl-dot { top:18px; width:18px; height:18px; font-size:.70rem; }
-  .tl-label { max-width:48px; min-width:30px; font-size:.36rem; line-height:1.02; }
-  .tl-below .tl-label { top:39px; }
-  .tl-above .tl-label { top:0; }
+  .timeline { padding:.32rem .55rem .34rem; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; }
+  .timeline::-webkit-scrollbar { height:4px; }
+  .timeline::-webkit-scrollbar-thumb { background:var(--border2); border-radius:999px; }
+  .timeline-head { min-width:920px; font-size:.62rem; }
+  .timeline-track { height:78px; min-width:920px; margin:0 1.15rem; }
+  .timeline-track::before, .timeline-fill { top:39px; height:4px; }
+  .tl-marker { height:78px; }
+  .tl-dot { top:28px; width:23px; height:23px; font-size:.88rem; }
+  .tl-label { max-width:72px; min-width:44px; font-size:.52rem; line-height:1.08; }
+  .tl-below .tl-label { top:57px; }
+  .tl-above .tl-label { top:1px; }
 
   .twrap { padding:.45rem .55rem 1rem; overflow:visible; }
   table { display:block; width:100%; min-width:0; }
@@ -740,14 +742,14 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 
 <script>
 /* =========================================================
-   OLECKO LIVE SCOREBOARD v7.18 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
+   OLECKO LIVE SCOREBOARD v7.21 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
    Do podmiany przed publikacją:
    1) CONFIG.csvUrl — link CSV opublikowanej zakładki WYNIKI_HTML
    2) eventNameOverride / eventSubtitleOverride — zostaw tekst, jeżeli dane w arkuszu mają złą nazwę/datę
    ========================================================= */
 const CONFIG = {
   csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmB8mscDBKYlCZT0-xCviLLzGwJPmpCihnZ4LvOuqRlKs8-LIa7XDv9o-xiD93mCjAKOPf5i5y06AV/pub?gid=1782259513&single=true&output=csv',
-  refreshSec: 30,
+  refreshSec: 60,
   kmPerLoopFallback: 6.706,
   eventNameOverride: 'Backyard Ultra Wiewióra Olecko',
   eventSubtitleOverride: 'Wyniki na żywo',
@@ -759,7 +761,7 @@ const CONFIG = {
   timeline: {
     maxLoop: 119,
     records: {
-      womenCourse: 20,
+      womenCourse: 18,
       course: 35,
       league2026: 53,
       world: 119
@@ -857,13 +859,25 @@ async function fetchData(){
     const txt = await res.text();
     const hash = simpleHash(txt);
     const parsed = parseCSV(txt);
-    rows = parsed.rows.filter(r => String(r[COL.name] || '').trim());
+    const freshRows = parsed.rows.filter(r => String(r[COL.name] || '').trim());
+
+    // Przy chwilowym błędzie Google / sieci nie wolno czyścić tabeli live.
+    // Jeżeli mamy stare poprawne dane, zostawiamy je na ekranie i próbujemy ponownie przy następnym odświeżeniu.
+    if (!freshRows.length && rows.length) {
+      throw new Error('Pusty lub niepełny CSV — zostawiam poprzednie wyniki.');
+    }
+
+    rows = freshRows;
     meta = readMeta(rows);
     applyMeta(meta); normalizeRows(); buildStats(); buildTimeline(); render(); setStickyTop();
     if (prevHash !== null && hash !== prevHash) toast('✓ Dane zaktualizowane');
     prevHash = hash;
   } catch(e) {
     console.error(e);
+    if (rows.length) {
+      toast('⚠️ Chwilowy problem z odświeżeniem — zostawiam poprzednie dane');
+      return;
+    }
     showTableMessage('⚠️ Błąd przetwarzania/pobierania danych.<br><small>' + esc(e.message || e) + '</small>');
   }
 }
