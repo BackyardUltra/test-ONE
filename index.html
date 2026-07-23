@@ -100,8 +100,9 @@ body {
   font-family:'JetBrains Mono',monospace;
 }
 .hdr-btn:hover { border-color:var(--orange); color:var(--orange); }
-#btn-lang,#btn-pdf,#btn-timeline { font-size:.72rem; letter-spacing:.08em; padding:.36rem .62rem; min-width:3.9rem; justify-content:center; }
+#btn-lang,#btn-pdf,#btn-timeline,#btn-legend { font-size:.72rem; letter-spacing:.08em; padding:.36rem .62rem; min-width:3.9rem; justify-content:center; }
 #btn-timeline { min-width:6.2rem; }
+#btn-legend { min-width:5.2rem; }
 #btn-fs { width:2.35rem; height:2.35rem; justify-content:center; font-size:1rem; }
 
 /* ── STATS BAR ── */
@@ -171,7 +172,7 @@ body.timeline-hidden .timeline {
 }
 .timeline-head {
   display:flex; justify-content:space-between; align-items:center; gap:.75rem;
-  font-size:.82rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
+  font-size:.92rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
   margin-bottom:.10rem;
 }
 .timeline-head strong { color:var(--orange2); font-family:'JetBrains Mono',monospace; letter-spacing:.03em; }
@@ -200,7 +201,7 @@ body.timeline-hidden .timeline {
 .edge-right .tl-dot { left:auto; right:0; transform:none; }
 .tl-label {
   position:absolute; left:50%; transform:translateX(-50%);
-  white-space:normal; min-width:54px; max-width:96px; font-size:.70rem; line-height:1.12;
+  white-space:normal; min-width:62px; max-width:106px; font-size:.82rem; line-height:1.12;
   color:var(--muted); letter-spacing:.01em; text-align:center; overflow-wrap:normal;
 }
 .edge-left .tl-label { left:0; transform:none; text-align:left; }
@@ -242,7 +243,7 @@ thead {
 thead tr,
 tbody tr {
   display:grid;
-  grid-template-columns:var(--table-cols, 64px 80px minmax(260px,2.8fr) 90px 110px 100px 140px 160px 170px 100px);
+  grid-template-columns:var(--table-cols, 76px 80px minmax(260px,2.8fr) 90px 110px 100px 140px 160px 170px 100px);
   align-items:center;
   width:100%;
 }
@@ -329,7 +330,8 @@ tbody tr.rf td:first-child { border-left: 3px solid #d9607a; }
 .brun { background:#001a0a; color:var(--green);   border:1px solid rgba(46,204,113,.4); }
 .bdnc { background:#181818; color:#b0b0b0;        border:1px solid rgba(160,160,160,.35); }
 .bover{ background:#1a0800; color:#ff8a4a;        border:1px solid rgba(255,122,0,.45); }
-.bdsq { background:#13001a; color:#d986ff;        border:1px solid rgba(217,134,255,.45); }
+.bdsq { background:#1a0000; color:var(--red);        border:1px solid rgba(255,59,59,.45); }
+.bdns { background:#1a1a1a; color:var(--muted); border:1px solid rgba(160,160,160,.45); }
 .bunk { background:#151515; color:var(--text2);   border:1px solid var(--border2); }
 
 /* ── LOADING ── */
@@ -419,6 +421,39 @@ tbody tr.rf td:first-child { border-left: 3px solid #d9607a; }
 .lap-best  .lap-t { color:var(--green); }
 .lap-worst { border-color:rgba(255,59,59,.4); background:#1a0000; }
 .lap-worst .lap-t { color:var(--red); }
+
+
+
+/* ── STATUS LEGEND ── */
+.legend-modal { max-width:780px; }
+.legend-intro { color:var(--text2); font-size:.96rem; line-height:1.38; margin-bottom:.85rem; }
+.status-legend-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+.status-card {
+  background:linear-gradient(180deg,#191919,#121212);
+  border:1px solid var(--border); border-radius:8px; padding:.72rem .78rem;
+  display:grid; grid-template-columns:4.7rem minmax(0,1fr); gap:.62rem; align-items:flex-start;
+}
+.status-card .legend-code { justify-self:start; font-family:'JetBrains Mono',monospace; font-weight:800; letter-spacing:.08em; border-radius:999px; padding:.25rem .55rem; min-width:4.1rem; text-align:center; font-size:.84rem; }
+.status-card .legend-main { min-width:0; }
+.status-card .legend-name { color:var(--text); font-weight:700; font-size:1.06rem; line-height:1.12; }
+.status-card .legend-full { color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:.72rem; margin-top:.12rem; }
+.status-card .legend-desc { color:var(--text2); line-height:1.33; margin-top:.38rem; font-size:.93rem; }
+.status-card .legend-impact { color:var(--muted); font-size:.78rem; line-height:1.25; margin-top:.35rem; border-top:1px solid rgba(255,255,255,.06); padding-top:.35rem; }
+.status-card.st-run { border-left:3px solid var(--green); }
+.status-card.st-win { border-left:3px solid var(--gold); }
+.status-card.st-rtc { border-left:3px solid var(--orange2); }
+.status-card.st-dnc { border-left:3px solid #777; }
+.status-card.st-over { border-left:3px solid #ff8a4a; }
+.status-card.st-dns { border-left:3px solid var(--muted); }
+.status-card.st-dsq { border-left:3px solid var(--red); }
+.status-card.st-run .legend-code { background:#001a0a; color:var(--green); border:1px solid rgba(46,204,113,.45); }
+.status-card.st-win .legend-code { background:#1a1200; color:var(--gold); border:1px solid rgba(255,216,74,.55); }
+.status-card.st-rtc .legend-code { background:#1a0e00; color:var(--orange2); border:1px solid rgba(255,122,0,.45); }
+.status-card.st-dnc .legend-code { background:#181818; color:#b0b0b0; border:1px solid rgba(160,160,160,.45); }
+.status-card.st-over .legend-code { background:#1a0800; color:#ff8a4a; border:1px solid rgba(255,122,0,.45); }
+.status-card.st-dnf .legend-code { background:#1a0000; color:var(--red); border:1px solid rgba(255,59,59,.45); }
+.status-card.st-dns .legend-code { background:#1a1a1a; color:var(--muted); border:1px solid rgba(160,160,160,.45); }
+.status-card.st-dsq .legend-code { background:#1a0000; color:var(--red); border:1px solid rgba(255,59,59,.55); }
 
 /* ── SPONSORS ── */
 .spstrip {
@@ -555,8 +590,9 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   #clock { font-size:.88rem; min-width:5.9rem; text-align:center; }
   #clock small { font-size:.56em; }
   .hdr-btn { height:2.05rem; padding:.28rem .46rem; border-radius:7px; }
-  #btn-lang,#btn-pdf,#btn-timeline { font-size:.58rem; min-width:2.7rem; padding:.25rem .42rem; letter-spacing:.04em; }
+  #btn-lang,#btn-pdf,#btn-timeline,#btn-legend { font-size:.58rem; min-width:2.7rem; padding:.25rem .42rem; letter-spacing:.04em; }
   #btn-timeline { min-width:4.8rem; }
+  #btn-legend { min-width:4.2rem; }
   #btn-fs { width:2.05rem; height:2.05rem; font-size:.86rem; }
 
   .stats-bar { padding:.42rem .55rem; gap:.35rem; }
@@ -569,12 +605,12 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   .timeline { padding:.32rem .55rem .34rem; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; }
   .timeline::-webkit-scrollbar { height:4px; }
   .timeline::-webkit-scrollbar-thumb { background:var(--border2); border-radius:999px; }
-  .timeline-head { min-width:1060px; font-size:.78rem; }
+  .timeline-head { min-width:1060px; font-size:.88rem; }
   .timeline-track { height:84px; min-width:1060px; margin:0 1.25rem; }
   .timeline-track::before, .timeline-fill { top:42px; height:4px; }
   .tl-marker { height:84px; }
   .tl-dot { top:30px; width:25px; height:25px; font-size:.98rem; }
-  .tl-label { max-width:88px; min-width:52px; font-size:.66rem; line-height:1.12; }
+  .tl-label { max-width:98px; min-width:62px; font-size:.80rem; line-height:1.12; }
   .tl-below .tl-label { top:61px; }
   .tl-above .tl-label { top:1px; }
 
@@ -585,12 +621,12 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 
   tbody tr {
     display:grid !important;
-    grid-template-columns:42px minmax(0,1fr) 54px 58px;
+    grid-template-columns:34px 34px minmax(0,1fr) 54px 58px;
     grid-template-areas:
-      "rank name country loops"
-      "bib  name status  loops"
-      "dist dist dist    dist";
-    gap:.12rem .45rem;
+      "rank bib name country loops"
+      "rank bib name status  loops"
+      "dist dist dist dist    dist";
+    gap:.12rem .42rem;
     align-items:center;
     width:100%;
     min-width:0;
@@ -621,7 +657,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   tbody td:nth-child(4) { grid-area:country; text-align:center; justify-self:center; font-size:1.35rem; }
   tbody td:nth-child(5) { grid-area:status; justify-self:center; align-self:center; }
   tbody td:nth-child(6) { grid-area:loops; justify-self:end; text-align:right; font-size:1.9rem; line-height:1; }
-  tbody td:nth-child(7) { grid-area:dist; font-size:.78rem; color:var(--text2); text-align:left; padding-top:.18rem !important; border-top:1px solid rgba(255,255,255,.05) !important; }
+  tbody td:nth-child(7) { grid-area:dist; font-size:.82rem; color:var(--text2); text-align:right; justify-self:stretch; padding-top:.18rem !important; border-top:1px solid rgba(255,255,255,.05) !important; }
   tbody td:nth-child(7)::before { content:'Dystans: '; color:var(--muted); font-family:'Barlow Condensed',sans-serif; }
   tbody td:nth-child(n+8) { display:none !important; }
 
@@ -629,6 +665,15 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   .cn-sub { font-size:.74em; line-height:1.08; margin-top:.12rem; white-space:nowrap; }
   .badge { font-size:.62rem; padding:.10rem .42rem; }
   .flag-cell { font-size:1.25rem; }
+
+
+  .legend-modal { max-width:680px; }
+  .legend-intro { font-size:1.03rem; }
+  .status-legend-cards { grid-template-columns:1fr; gap:.55rem; }
+  .status-card { grid-template-columns:4.45rem minmax(0,1fr); padding:.68rem .7rem; gap:.55rem; }
+  .status-card .legend-code { min-width:3.9rem; font-size:.82rem; padding:.22rem .45rem; }
+  .status-card .legend-name { font-size:1.08rem; }
+  .status-card .legend-desc { font-size:.95rem; }
 
   .spstrip { padding:.34rem 0; }
   .splbl { font-size:.50rem; padding:0 .48rem; }
@@ -667,7 +712,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   #clock { min-width:5.25rem; font-size:.78rem; }
   #btn-timeline { min-width:4.25rem; }
   .chip { font-size:.72rem; padding:.25rem .42rem; }
-  tbody tr { grid-template-columns:38px minmax(0,1fr) 45px 50px; gap:.1rem .35rem; padding:.48rem .48rem; }
+  tbody tr { grid-template-columns:31px 31px minmax(0,1fr) 45px 50px; gap:.1rem .35rem; padding:.48rem .48rem; }
   .cn { font-size:1.08rem; }
   tbody td:nth-child(1) { font-size:1.20rem; }
   tbody td:nth-child(2) { font-size:.78rem; }
@@ -693,6 +738,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
     <div id="clock"><div id="clock-val">00:00:00</div><small id="clock-lbl">czas lokalny</small></div>
     <button id="btn-pdf" class="hdr-btn" onclick="downloadPDF()" title="Pobierz / drukuj PDF">PDF</button>
     <button id="btn-timeline" class="hdr-btn" onclick="toggleTimeline()" title="Pokaż / ukryj oś czasu">Oś czasu</button>
+    <button id="btn-legend" class="hdr-btn" onclick="openStatusLegend()" title="Legenda statusów">Statusy</button>
     <button id="btn-lang" class="hdr-btn" onclick="toggleLang()" title="English view">EN</button>
     <button id="btn-fs" class="hdr-btn" onclick="toggleFS()" title="Pełny ekran">⛶</button>
   </div>
@@ -719,7 +765,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 
 <div class="rfrow">
   <span id="lbl-refresh">Odświeżanie za</span>
-  <span id="rf-cd">30s</span>
+  <span id="rf-cd">60s</span>
 </div>
 
 <div class="controls">
@@ -766,22 +812,40 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   </div>
 </div>
 
+
+
+<!-- STATUS LEGEND MODAL -->
+<div class="overlay" id="legend-ov" onclick="closeLegend(event)">
+  <div class="modal legend-modal">
+    <div class="mhdr">
+      <div>
+        <div class="mname" id="legend-title">Legenda statusów</div>
+        <div class="mclub" id="legend-subtitle">Co oznaczają skróty w tabeli?</div>
+      </div>
+      <button class="mcls" onclick="document.getElementById('legend-ov').classList.remove('open')">✕</button>
+    </div>
+    <div class="mbody" id="legend-body"></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 /* =========================================================
-   OLECKO LIVE SCOREBOARD v7.22 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
+   OLECKO LIVE SCOREBOARD v7.25 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
    Do podmiany przed publikacją:
    1) CONFIG.csvUrl — link CSV opublikowanej zakładki WYNIKI_HTML
-   2) eventNameOverride / eventSubtitleOverride — zostaw tekst, jeżeli dane w arkuszu mają złą nazwę/datę
+   2) metaCsvUrl opcjonalnie — domyślnie próbuje czytać META_HTML po nazwie arkusza
    ========================================================= */
 const CONFIG = {
   csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmB8mscDBKYlCZT0-xCviLLzGwJPmpCihnZ4LvOuqRlKs8-LIa7XDv9o-xiD93mCjAKOPf5i5y06AV/pub?gid=1782259513&single=true&output=csv',
+  metaSheetName: 'META_HTML',
+  metaCsvUrl: '',
   refreshSec: 60,
   kmPerLoopFallback: 6.706,
-  eventNameOverride: 'Backyard Ultra Wiewióra Olecko',
-  eventSubtitleOverride: 'Wyniki na żywo',
-  eventSubtitleOverrideEn: 'Live results',
+  eventNameOverride: '',
+  eventSubtitleOverride: '',
+  eventSubtitleOverrideEn: '',
   showPBColumn: false,
   showToPBColumn: true,
   showTimelineDefault: false,
@@ -823,8 +887,8 @@ const I18N = {
     liveResults:'Wyniki na żywo', updated:'Aktualizacja:', localTime:'czas lokalny', raceTime:'czas zawodów', noResults:'Brak wyników',
     place:'#', bib:'Nr', runner:'Zawodnik', country:'Kraj', status:'Status', loops:'Pętle', distance:'Dystans', lastLap:'Ostatnia pętla', bestLap:'Najlepsza pętla', pb:'PB', toPb:'Do PB',
     completed:'ukończone', totalKm:'km łącznie', runnerData:'Dane zawodnika', lapTimes:'Czasy pętli', completedLaps:'ukończonych',
-    gender:'Płeć', city:'Miasto', team:'Drużyna', worstLap:'Najgorsza pętla', avgLap:'Średnia pętla', totalTime:'Suma czasów', rest:'Suma odpoczynku', pbLoops:'PB pętle', workingPlace:'Pozycja robocza', lapNote:'Czas = czas pętli. Odp. = odpoczynek od mety pętli do startu kolejnej.', lapTimeShort:'czas', restShort:'odp.',
-    timeline:'Oś czasu', currentLoop:'Aktualna pętla:', timelineTitle:'Pokaż / ukryj oś czasu', sponsorsTitle:'Pokaż / ukryj sponsorów', closeSponsors:'Zamknij baner sponsorów',
+    gender:'Płeć', city:'Miasto', team:'Drużyna', worstLap:'Najgorsza pętla', avgLap:'Średnia pętla', totalTime:'Suma czasów', rest:'Suma odpoczynku', pbLoops:'PB pętle', workingPlace:'Poz.', lapNote:'Czas = czas pętli. Odp. = odpoczynek od mety pętli do startu kolejnej.', lapTimeShort:'czas', restShort:'odp.',
+    timeline:'Oś czasu', statusLegend:'Statusy', statusLegendTitle:'Legenda statusów', statusLegendSubtitle:'Co oznaczają skróty przy zawodnikach?', currentLoop:'Aktualna pętla:', timelineTitle:'Pokaż / ukryj oś czasu', sponsorsTitle:'Pokaż / ukryj sponsorów', closeSponsors:'Zamknij baner sponsorów',
     start:'Start', now:'Teraz', day1:'1. doba', day2:'2. doba', womenRecord:'Rekord trasy kobiet', courseRecord:'Rekord trasy', leagueRecord:'Rekord ligi 2026', worldRecord:'Rekord świata', day:'doba'
   },
   en: {
@@ -833,8 +897,8 @@ const I18N = {
     liveResults:'Live results', updated:'Updated:', localTime:'local time', raceTime:'race time', noResults:'No results',
     place:'#', bib:'Bib', runner:'Runner', country:'Country', status:'Status', loops:'Loops', distance:'Distance', lastLap:'Last lap', bestLap:'Best lap', pb:'PB', toPb:'To PB',
     completed:'completed', totalKm:'total km', runnerData:'Runner data', lapTimes:'Lap times', completedLaps:'completed',
-    gender:'Gender', city:'City', team:'Team', worstLap:'Worst lap', avgLap:'Average lap', totalTime:'Total time', rest:'Total rest', pbLoops:'PB loops', workingPlace:'Provisional position', lapNote:'Lap = lap time. Rest = time from finishing a lap to the next lap start.', lapTimeShort:'lap', restShort:'rest',
-    timeline:'Timeline', currentLoop:'Current loop:', timelineTitle:'Show / hide timeline', sponsorsTitle:'Show / hide sponsors', closeSponsors:'Close sponsors banner',
+    gender:'Gender', city:'City', team:'Team', worstLap:'Worst lap', avgLap:'Average lap', totalTime:'Total time', rest:'Total rest', pbLoops:'PB loops', workingPlace:'Pos.', lapNote:'Lap = lap time. Rest = time from finishing a lap to the next lap start.', lapTimeShort:'lap', restShort:'rest',
+    timeline:'Timeline', statusLegend:'Statuses', statusLegendTitle:'Status legend', statusLegendSubtitle:'What do the runner status abbreviations mean?', currentLoop:'Current loop:', timelineTitle:'Show / hide timeline', sponsorsTitle:'Show / hide sponsors', closeSponsors:'Close sponsors banner',
     start:'Start', now:'Now', day1:'Day 1', day2:'Day 2', womenRecord:'Women course record', courseRecord:'Course record', leagueRecord:'League record 2026', worldRecord:'World record', day:'day'
   }
 };
@@ -851,7 +915,7 @@ initStatic();
 fetchData();
 setInterval(refreshCountdown, 1000);
 setInterval(updateRaceClock, 1000);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('ov').classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('ov').classList.remove('open'); document.getElementById('legend-ov').classList.remove('open'); } });
 document.addEventListener('fullscreenchange', () => { const b=document.getElementById('btn-fs'); if(b) b.textContent='⛶'; });
 
 function initStatic(){
@@ -896,7 +960,9 @@ async function fetchData(){
     }
 
     rows = freshRows;
-    meta = readMeta(rows);
+    const rowMeta = readMeta(rows);
+    const sheetMeta = await fetchMetaSheet(baseCsvUrl).catch(err => { console.warn('META_HTML fetch failed', err); return {}; });
+    meta = mergeMeta_(rowMeta, sheetMeta);
     applyMeta(meta); normalizeRows(); buildStats(); buildTimeline(); render(); setStickyTop();
     if (prevHash !== null && hash !== prevHash) toast('✓ Dane zaktualizowane');
     prevHash = hash;
@@ -915,6 +981,82 @@ function normalizePublishedCsvUrl(url){
   if(!raw) return raw;
   if(raw.includes('/pubhtml')) return raw.replace('/pubhtml', '/pub?output=csv');
   return raw;
+}
+
+
+async function fetchMetaSheet(baseCsvUrl){
+  const candidates = [];
+  if (CONFIG.metaCsvUrl) candidates.push(CONFIG.metaCsvUrl);
+  const bySheetName = buildSheetCsvUrl_(baseCsvUrl, CONFIG.metaSheetName || 'META_HTML');
+  if (bySheetName) candidates.push(bySheetName);
+
+  // Część publikowanych arkuszy nie zwraca zakładki po nazwie przez gviz.
+  // Wtedy próbujemy odczytać opublikowany widok HTML i znaleźć GID zakładki META_HTML.
+  const byPublishedHtml = await findPublishedSheetCsvByName_(baseCsvUrl, CONFIG.metaSheetName || 'META_HTML').catch(() => '');
+  if (byPublishedHtml) candidates.push(byPublishedHtml);
+
+  for (const candidate of [...new Set(candidates)]) {
+    try {
+      const finalUrl = candidate + (candidate.includes('?') ? '&' : '?') + 't=' + Date.now();
+      const res = await fetch(finalUrl, {cache:'no-store'});
+      if(!res.ok) continue;
+      const txt = await res.text();
+      const parsed = parseCSV(txt);
+      const out = parseMetaRows_(parsed);
+      if(Object.keys(out).length) return out;
+    } catch (err) {
+      console.warn('META candidate failed', candidate, err);
+    }
+  }
+  return {};
+}
+function parseMetaRows_(parsed){
+  const out = {};
+  (parsed.rows || []).forEach(r => {
+    const key = String(r.KEY || r.Key || r.key || r[parsed.headers?.[0]] || '').trim();
+    const val = String(r.VALUE || r.Value || r.value || r[parsed.headers?.[1]] || '').trim();
+    if(!key) return;
+    const k = key.toLowerCase();
+    if(k === 'event_name') out.eventName = val;
+    if(k === 'event_subtitle') out.eventSubtitle = val;
+    if(k === 'race_start') out.raceStart = val;
+    if(k === 'lap_distance_km') out.lapDistanceKm = num(val) || '';
+    if(k === 'active_loop') out.activeLoop = int(val) || 0;
+    if(k === 'last_update') out.lastUpdate = val;
+  });
+  return out;
+}
+function buildSheetCsvUrl_(baseCsvUrl, sheetName){
+  const raw = String(baseCsvUrl || CONFIG.csvUrl || '').trim();
+  const m = raw.match(/\/spreadsheets\/d\/e\/([^/]+)/);
+  if(!m) return '';
+  return `https://docs.google.com/spreadsheets/d/e/${m[1]}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+}
+function buildPublishedHtmlUrl_(baseCsvUrl){
+  const raw = String(baseCsvUrl || CONFIG.csvUrl || '').trim();
+  const m = raw.match(/(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[^/]+)/);
+  return m ? `${m[1]}/pubhtml` : '';
+}
+async function findPublishedSheetCsvByName_(baseCsvUrl, sheetName){
+  const htmlUrl = buildPublishedHtmlUrl_(baseCsvUrl);
+  if(!htmlUrl) return '';
+  const res = await fetch(htmlUrl + '?t=' + Date.now(), {cache:'no-store'});
+  if(!res.ok) return '';
+  const html = await res.text();
+  const escaped = String(sheetName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp('gid=([0-9]+)[^>]{0,500}>' + escaped + '<', 'i');
+  const m = html.match(re) || html.match(new RegExp(escaped + '[\s\S]{0,500}?gid=([0-9]+)', 'i'));
+  if(!m) return '';
+  const gid = m[1];
+  const base = String(baseCsvUrl || CONFIG.csvUrl).match(/(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[^/]+)/);
+  return base ? `${base[1]}/pub?gid=${gid}&single=true&output=csv` : '';
+}
+function mergeMeta_(rowMeta, sheetMeta){
+  const out = {...(rowMeta || {})};
+  Object.entries(sheetMeta || {}).forEach(([k,v]) => {
+    if(v !== '' && v !== null && v !== undefined) out[k] = v;
+  });
+  return out;
 }
 
 function parseCSV(txt){
@@ -985,7 +1127,7 @@ function normalizeRows(){
     r._flag = flagFor(r[COL.flag], r[COL.country]);
     r._laps = parseLaps(r[COL.lapsJson]);
   });
-  rows.sort((a,b) => (a._place || 999999) - (b._place || 999999));
+  rows.sort(defaultLiveCompare);
 }
 
 function parseLaps(raw){
@@ -1015,7 +1157,7 @@ function buildHead(){
 }
 function setTableGrid(cols = tableCols()){
   const widthFor = c => {
-    if(c.role === 'place') return '64px';
+    if(c.role === 'place') return '76px';
     if(c.role === 'bib') return '80px';
     if(c.role === 'name') return 'minmax(260px,2.8fr)';
     if(c.role === 'flag') return '90px';
@@ -1072,7 +1214,36 @@ function cellHtml(r,c){
   return `<td class="ck">${esc(r[c.key] || '–')}</td>`;
 }
 
+function statusLiveGroup_(r){
+  const s = r._status || '';
+  if (s === 'RUN') return 0;
+  if (s === 'WIN') return 1;
+  if (['RTC','DNC','OVER','DNF','DSQ'].includes(s)) return 2;
+  if (s === 'DNS') return 3;
+  return 2;
+}
+function statusWeight_(s){
+  return {RUN:0, WIN:1, OVER:2, DNC:3, RTC:4, DNF:5, DSQ:6, DNS:7}[s || ''] ?? 9;
+}
+function defaultLiveCompare(a,b){
+  const ga = statusLiveGroup_(a), gb = statusLiveGroup_(b);
+  if (ga !== gb) return ga - gb;
+  // aktywni: najpierw najwięcej pętli, potem pozycja z arkusza / numer
+  if (ga === 0 || ga === 1) {
+    if ((b._loops || 0) !== (a._loops || 0)) return (b._loops || 0) - (a._loops || 0);
+    if ((a._place || 999999) !== (b._place || 999999)) return (a._place || 999999) - (b._place || 999999);
+  } else {
+    // odpadli na dole: najpierw więcej pętli, potem waga statusu
+    if ((b._loops || 0) !== (a._loops || 0)) return (b._loops || 0) - (a._loops || 0);
+    const wa = statusWeight_(a._status), wb = statusWeight_(b._status);
+    if (wa !== wb) return wa - wb;
+  }
+  const numA = num(a[COL.bib]), numB = num(b[COL.bib]);
+  if (numA && numB && numA !== numB) return numA - numB;
+  return String(a._name || '').localeCompare(String(b._name || ''), 'pl');
+}
 function sortRows(data){
+  if (sortKey === COL.place && sortDir > 0) return [...data].sort(defaultLiveCompare);
   return [...data].sort((a,b) => {
     const av = sortValue(a, sortKey), bv = sortValue(b, sortKey);
     if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * sortDir;
@@ -1094,8 +1265,8 @@ function sortT(key){
 
 function buildStats(){
   const starters = rows.filter(r => r._status !== 'DNS').length;
-  const active = rows.filter(r => ['RUN','RTC'].includes(r._status)).length;
-  const dropped = rows.filter(r => ['DNF','DNC','OVER','DSQ'].includes(r._status)).length;
+  const active = rows.filter(r => r._status === 'RUN').length;
+  const dropped = rows.filter(r => ['RTC','DNF','DNC','OVER','DSQ'].includes(r._status)).length;
   const maxLoops = rows.length ? Math.max(...rows.map(r => r._loops || 0)) : 0;
   const activeLoop = meta.activeLoop || maxLoops;
   const best = findBestLap();
@@ -1133,14 +1304,14 @@ function buildTimeline(){
 
   const shortLabel = (type, loop, text) => {
     const langPl = uiLang === 'pl';
-    if(type === 'km') return `${text}\n${loop} p.`;
-    if(type === 'day') return `${loop}\n${text}`;
-    if(type === 'current') return langPl ? `Teraz\np. ${loop}` : `Now\nlap ${loop}`;
-    if(type === 'start') return langPl ? 'Start\n0 p.' : 'Start\n0 lap';
-    if(type === 'women') return langPl ? `${loop}\nrek. kobiet` : `${loop}\nwomen rec.`;
-    if(type === 'course') return langPl ? `${loop}\nrek. trasy` : `${loop}\ncourse rec.`;
-    if(type === 'league') return langPl ? `${loop}\nliga 2026` : `${loop}\nleague 2026`;
-    if(type === 'world') return langPl ? `${loop}\nrek. świata` : `${loop}\nworld rec.`;
+    if(type === 'km') return langPl ? `${text}\n${loop} p.` : `${text}\n${loop} laps`;
+    if(type === 'day') return langPl ? `${loop} p.\n${text}` : `${loop} laps\n${text}`;
+    if(type === 'current') return langPl ? `Teraz\n${loop} p.` : `Now\n${loop} laps`;
+    if(type === 'start') return langPl ? 'Start\n0 p.' : 'Start\n0 laps';
+    if(type === 'women') return langPl ? `${loop} p.\nrek. kobiet` : `${loop} laps\nwomen rec.`;
+    if(type === 'course') return langPl ? `${loop} p.\nrek. trasy` : `${loop} laps\ncourse rec.`;
+    if(type === 'league') return langPl ? `${loop} p.\nliga 2026` : `${loop} laps\nleague 2026`;
+    if(type === 'world') return langPl ? `${loop} p.\nrek. świata` : `${loop} laps\nworld rec.`;
     return `${loop}`;
   };
 
@@ -1291,13 +1462,68 @@ function updateLabels(){
   const srch = document.getElementById('srch'); if (srch) srch.placeholder = '🔍  ' + t('search');
   const pdf = document.getElementById('btn-pdf'); if (pdf) { pdf.textContent = t('pdf'); pdf.title = t('pdfTitle'); }
   const tl = document.getElementById('btn-timeline'); if (tl) { tl.textContent = uiLang === 'pl' ? 'Oś czasu' : 'Timeline'; tl.title = t('timelineTitle'); }
+  const legendBtn = document.getElementById('btn-legend'); if (legendBtn) { legendBtn.textContent = t('statusLegend'); legendBtn.title = t('statusLegendTitle'); }
   const spc = document.getElementById('btn-spclose'); if (spc) spc.title = t('closeSponsors');
   const lang = document.getElementById('btn-lang'); if (lang) { lang.textContent = uiLang === 'pl' ? 'EN' : 'PL'; lang.title = t('langTitle'); }
   const fs = document.getElementById('btn-fs'); if (fs) fs.title = t('fsTitle');
 }
+
+function statusLegendRows(){
+  if (uiLang === 'en') return [
+    {code:'RUN', cls:'st-run', name:'Running', full:'Running', desc:'Runner is still in the race.', impact:'Still competing.'},
+    {code:'WIN', cls:'st-win', name:'Winner', full:'Winner', desc:'Runner won the event.', impact:'Final winning status.'},
+    {code:'RTC', cls:'st-rtc', name:'Refused to continue', full:'Refuse To Continue', desc:'Runner finished the last loop in time, but did not start the next one.', impact:'The last completed loop counts.'},
+    {code:'DNC', cls:'st-dnc', name:'Did not complete loop', full:'Did Not Complete', desc:'Runner started a loop, but returned or left the course before completing it.', impact:'That loop does not count.'},
+    {code:'OVER', cls:'st-over', name:'Over time limit', full:'Over Time Limit', desc:'Runner finished the loop after the 60-minute limit.', impact:'That loop does not count.'},
+    {code:'DNS', cls:'st-dns', name:'Did not start', full:'Did Not Start', desc:'Runner was on the start list, but did not start the race.', impact:'Not counted as a starter.'},
+    {code:'DSQ', cls:'st-dsq', name:'Disqualified', full:'Disqualified', desc:'Runner was removed from the classification for breaking the rules.', impact:'Loops completed before disqualification still count.'}
+  ];
+  return [
+    {code:'RUN', cls:'st-run', name:'Biegnie', full:'Running', desc:'Zawodnik nadal bierze udział w rywalizacji.', impact:'Nadal jest w grze.'},
+    {code:'WIN', cls:'st-win', name:'Zwycięzca', full:'Winner', desc:'Zawodnik wygrał zawody.', impact:'Końcowy status zwycięzcy.'},
+    {code:'RTC', cls:'st-rtc', name:'Odmówił kontynuacji', full:'Refuse To Continue', desc:'Ukończył ostatnią pętlę w limicie, ale nie ruszył na następną.', impact:'Ostatnia ukończona pętla jest zaliczona.'},
+    {code:'DNC', cls:'st-dnc', name:'Nie ukończył pętli', full:'Did Not Complete', desc:'Wystartował na pętlę, ale zawrócił albo zszedł z trasy.', impact:'Ta pętla nie jest zaliczona.'},
+    {code:'OVER', cls:'st-over', name:'Po limicie czasu', full:'Over Time Limit', desc:'Ukończył pętlę, ale po upływie limitu 60 minut.', impact:'Ta pętla nie jest zaliczona.'},
+    {code:'DNS', cls:'st-dns', name:'Nie wystartował', full:'Did Not Start', desc:'Był na liście startowej, ale nie rozpoczął zawodów.', impact:'Nie liczy się jako startujący.'},
+    {code:'DSQ', cls:'st-dsq', name:'Zdyskwalifikowany', full:'Disqualified', desc:'Został wykluczony za złamanie zasad.', impact:'Pętle ukończone przed dyskwalifikacją nadal się liczą.'}
+  ];
+}
+function openStatusLegend(){
+  const title = document.getElementById('legend-title');
+  const subtitle = document.getElementById('legend-subtitle');
+  const body = document.getElementById('legend-body');
+  if(!body) return;
+  title.textContent = t('statusLegendTitle');
+  subtitle.textContent = t('statusLegendSubtitle');
+  const rows = statusLegendRows();
+  const intro = uiLang === 'en'
+    ? 'A backyard ultra continues while runners start the next loop. These shortcuts explain what happened to each runner.'
+    : 'W backyardzie zawodnik odpada dopiero wtedy, gdy nie ruszy na kolejną pętlę albo nie ukończy jej w limicie. Skróty pokazują, co dokładnie się stało.';
+  body.innerHTML = `<div class="legend-intro">${esc(intro)}</div><div class="status-legend-cards">
+    ${rows.map(r => {
+      const showFull = uiLang === 'pl' || String(r.full || '').toLowerCase() !== String(r.name || '').toLowerCase();
+      return `<article class="status-card ${esc(r.cls)}">
+        <div class="legend-code">${esc(r.code)}</div>
+        <div class="legend-main">
+          <div class="legend-name">${esc(r.name)}</div>
+          ${showFull ? `<div class="legend-full">${esc(r.full)}</div>` : ''}
+          <div class="legend-desc">${esc(r.desc)}</div>
+          <div class="legend-impact">${esc(r.impact)}</div>
+        </div>
+      </article>`;
+    }).join('')}
+  </div>`;
+  document.getElementById('legend-ov').classList.add('open');
+  requestAnimationFrame(() => { body.scrollTop = 0; });
+}
+function closeLegend(e){
+  const ov = document.getElementById('legend-ov');
+  if(e.target === ov) ov.classList.remove('open');
+}
+
 function toggleLang(){
   uiLang = uiLang === 'pl' ? 'en' : 'pl';
-  updateLabels(); applyMeta(meta); buildTimeline(); buildHead(); render(); updateRaceClock();
+  updateLabels(); applyMeta(meta); buildTimeline(); buildHead(); render(); updateRaceClock(); if(document.getElementById('legend-ov')?.classList.contains('open')) openStatusLegend();
 }
 function preparePrintReport(){
   const eventName = CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra';
