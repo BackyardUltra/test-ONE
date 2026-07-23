@@ -222,6 +222,7 @@ body.timeline-hidden .timeline {
   overflow: visible;
   padding:0 1.4rem 1rem;
   -webkit-overflow-scrolling:touch;
+  background:#050505;
 }
 table {
   display:block;
@@ -234,11 +235,19 @@ thead, tbody { display:block; width:100%; }
 tbody { padding-top:6px; }
 thead {
   position:sticky;
-  top:calc(var(--sticky-top) + 1px);
+  top:calc(var(--sticky-top) - 1px);
   z-index:185;
   background:#050505;
   backdrop-filter:none;
   box-shadow:0 2px 0 var(--border), 0 10px 18px rgba(0,0,0,.75);
+  position:-webkit-sticky;
+}
+thead::before {
+  content:'';
+  position:absolute;
+  left:0; right:0; top:-8px; height:9px;
+  background:#050505;
+  pointer-events:none;
 }
 thead tr,
 tbody tr {
@@ -248,7 +257,7 @@ tbody tr {
   width:100%;
 }
 thead tr { background:#050505; }
-thead th { background:#050505; }
+thead th { background:#050505; position:relative; z-index:1; }
 thead tr { min-height:42px; }
 tbody tr {
   background:var(--bg2);
@@ -454,6 +463,25 @@ tbody tr.rf td:first-child { border-left: 3px solid #d9607a; }
 .status-card.st-dnf .legend-code { background:#1a0000; color:var(--red); border:1px solid rgba(255,59,59,.45); }
 .status-card.st-dns .legend-code { background:#1a1a1a; color:var(--muted); border:1px solid rgba(160,160,160,.45); }
 .status-card.st-dsq .legend-code { background:#1a0000; color:var(--red); border:1px solid rgba(255,59,59,.55); }
+
+
+/* ── PRIVACY ── */
+.footer-link {
+  background:transparent; border:0; color:#6f6f6f; cursor:pointer;
+  font:inherit; letter-spacing:.08em; text-decoration:underline; text-underline-offset:2px;
+  padding:0 .25rem;
+}
+.footer-link:hover { color:var(--orange2); }
+.privacy-text { color:var(--text2); font-size:1.02rem; line-height:1.38; }
+.privacy-text p { margin:.45rem 0 .75rem; }
+.privacy-text strong { color:var(--text); }
+.privacy-list { display:grid; gap:.55rem; margin-top:.7rem; }
+.privacy-item {
+  background:#1a1a1a; border:1px solid var(--border); border-radius:7px;
+  padding:.7rem .8rem;
+}
+.privacy-item .privacy-k { font-family:'Bebas Neue',sans-serif; letter-spacing:.08em; color:var(--orange2); font-size:.95rem; margin-bottom:.22rem; }
+.privacy-item .privacy-v { color:var(--text2); }
 
 /* ── SPONSORS ── */
 .spstrip {
@@ -681,7 +709,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   .spimg { height:30px; max-width:120px; }
   .spclose { width:30px; height:30px; margin-right:.35rem; }
 
-  footer { display:none; }
+  footer { display:block; padding:.5rem 1rem 4.5rem; font-size:.56rem; }
 
   .overlay { padding:.45rem; align-items:flex-start; padding-top:1.1rem; }
   .modal { max-height:94vh; max-width:680px; }
@@ -795,7 +823,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   <div class="spwrap"><div class="sptrack" id="spt"></div></div>
   <button class="spclose" id="btn-spclose" onclick="toggleSponsors(false)" title="Zamknij baner sponsorów">×</button>
 </div>
-<footer>Backyard Ultra Wiewióra Olecko · Live Scoreboard</footer>
+<footer><span id="footer-text">Backyard Ultra Wiewióra Olecko · Live Scoreboard</span> · <button class="footer-link" id="privacy-btn" onclick="openPrivacy()">Polityka prywatności</button></footer>
 
 <!-- MODAL -->
 <div class="overlay" id="ov" onclick="closeOv(event)">
@@ -828,11 +856,27 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   </div>
 </div>
 
+
+
+<!-- PRIVACY MODAL -->
+<div class="overlay" id="privacy-ov" onclick="closePrivacy(event)">
+  <div class="modal legend-modal">
+    <div class="mhdr">
+      <div>
+        <div class="mname" id="privacy-title">Polityka prywatności</div>
+        <div class="mclub" id="privacy-subtitle">Dane w wynikach live</div>
+      </div>
+      <button class="mcls" onclick="document.getElementById('privacy-ov').classList.remove('open')">✕</button>
+    </div>
+    <div class="mbody" id="privacy-body"></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 /* =========================================================
-   OLECKO LIVE SCOREBOARD v7.25 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
+   OLECKO LIVE SCOREBOARD v7.26 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
    Do podmiany przed publikacją:
    1) CONFIG.csvUrl — link CSV opublikowanej zakładki WYNIKI_HTML
    2) metaCsvUrl opcjonalnie — domyślnie próbuje czytać META_HTML po nazwie arkusza
@@ -888,7 +932,7 @@ const I18N = {
     place:'#', bib:'Nr', runner:'Zawodnik', country:'Kraj', status:'Status', loops:'Pętle', distance:'Dystans', lastLap:'Ostatnia pętla', bestLap:'Najlepsza pętla', pb:'PB', toPb:'Do PB',
     completed:'ukończone', totalKm:'km łącznie', runnerData:'Dane zawodnika', lapTimes:'Czasy pętli', completedLaps:'ukończonych',
     gender:'Płeć', city:'Miasto', team:'Drużyna', worstLap:'Najgorsza pętla', avgLap:'Średnia pętla', totalTime:'Suma czasów', rest:'Suma odpoczynku', pbLoops:'PB pętle', workingPlace:'Poz.', lapNote:'Czas = czas pętli. Odp. = odpoczynek od mety pętli do startu kolejnej.', lapTimeShort:'czas', restShort:'odp.',
-    timeline:'Oś czasu', statusLegend:'Statusy', statusLegendTitle:'Legenda statusów', statusLegendSubtitle:'Co oznaczają skróty przy zawodnikach?', currentLoop:'Aktualna pętla:', timelineTitle:'Pokaż / ukryj oś czasu', sponsorsTitle:'Pokaż / ukryj sponsorów', closeSponsors:'Zamknij baner sponsorów',
+    timeline:'Oś czasu', statusLegend:'Statusy', statusLegendTitle:'Legenda statusów', statusLegendSubtitle:'Co oznaczają skróty przy zawodnikach?', privacy:'Polityka prywatności', privacyTitle:'Polityka prywatności', privacySubtitle:'Dane w wynikach live', currentLoop:'Aktualna pętla:', timelineTitle:'Pokaż / ukryj oś czasu', sponsorsTitle:'Pokaż / ukryj sponsorów', closeSponsors:'Zamknij baner sponsorów',
     start:'Start', now:'Teraz', day1:'1. doba', day2:'2. doba', womenRecord:'Rekord trasy kobiet', courseRecord:'Rekord trasy', leagueRecord:'Rekord ligi 2026', worldRecord:'Rekord świata', day:'doba'
   },
   en: {
@@ -898,7 +942,7 @@ const I18N = {
     place:'#', bib:'Bib', runner:'Runner', country:'Country', status:'Status', loops:'Loops', distance:'Distance', lastLap:'Last lap', bestLap:'Best lap', pb:'PB', toPb:'To PB',
     completed:'completed', totalKm:'total km', runnerData:'Runner data', lapTimes:'Lap times', completedLaps:'completed',
     gender:'Gender', city:'City', team:'Team', worstLap:'Worst lap', avgLap:'Average lap', totalTime:'Total time', rest:'Total rest', pbLoops:'PB loops', workingPlace:'Pos.', lapNote:'Lap = lap time. Rest = time from finishing a lap to the next lap start.', lapTimeShort:'lap', restShort:'rest',
-    timeline:'Timeline', statusLegend:'Statuses', statusLegendTitle:'Status legend', statusLegendSubtitle:'What do the runner status abbreviations mean?', currentLoop:'Current loop:', timelineTitle:'Show / hide timeline', sponsorsTitle:'Show / hide sponsors', closeSponsors:'Close sponsors banner',
+    timeline:'Timeline', statusLegend:'Statuses', statusLegendTitle:'Status legend', statusLegendSubtitle:'What do the runner status abbreviations mean?', privacy:'Privacy policy', privacyTitle:'Privacy policy', privacySubtitle:'Live results data', currentLoop:'Current loop:', timelineTitle:'Show / hide timeline', sponsorsTitle:'Show / hide sponsors', closeSponsors:'Close sponsors banner',
     start:'Start', now:'Now', day1:'Day 1', day2:'Day 2', womenRecord:'Women course record', courseRecord:'Course record', leagueRecord:'League record 2026', worldRecord:'World record', day:'day'
   }
 };
@@ -915,14 +959,14 @@ initStatic();
 fetchData();
 setInterval(refreshCountdown, 1000);
 setInterval(updateRaceClock, 1000);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('ov').classList.remove('open'); document.getElementById('legend-ov').classList.remove('open'); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('ov').classList.remove('open'); document.getElementById('legend-ov').classList.remove('open'); document.getElementById('privacy-ov').classList.remove('open'); } });
 document.addEventListener('fullscreenchange', () => { const b=document.getElementById('btn-fs'); if(b) b.textContent='⛶'; });
 
 function initStatic(){
   const logo = document.querySelector('.hdr-logo');
   if (logo) logo.src = CONFIG.logoUrl;
-  const footer = document.querySelector('footer');
-  if (footer) footer.textContent = CONFIG.footerText;
+  const footerText = document.getElementById('footer-text');
+  if (footerText) footerText.textContent = CONFIG.footerText;
   const spt = document.getElementById('spt');
   spt.innerHTML = [...CONFIG.sponsors, ...CONFIG.sponsors].map(s => `<img class="spimg" src="${esc(s)}" alt="Sponsor" loading="lazy">`).join('');
   loadUiPreferences();
@@ -1045,7 +1089,7 @@ async function findPublishedSheetCsvByName_(baseCsvUrl, sheetName){
   const html = await res.text();
   const escaped = String(sheetName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp('gid=([0-9]+)[^>]{0,500}>' + escaped + '<', 'i');
-  const m = html.match(re) || html.match(new RegExp(escaped + '[\s\S]{0,500}?gid=([0-9]+)', 'i'));
+  const m = html.match(re) || html.match(new RegExp(escaped + '[\\s\\S]{0,800}?gid=([0-9]+)', 'i')) || html.match(new RegExp('gid=([0-9]+)[\\s\\S]{0,800}?' + escaped, 'i'));
   if(!m) return '';
   const gid = m[1];
   const base = String(baseCsvUrl || CONFIG.csvUrl).match(/(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[^/]+)/);
@@ -1464,6 +1508,7 @@ function updateLabels(){
   const tl = document.getElementById('btn-timeline'); if (tl) { tl.textContent = uiLang === 'pl' ? 'Oś czasu' : 'Timeline'; tl.title = t('timelineTitle'); }
   const legendBtn = document.getElementById('btn-legend'); if (legendBtn) { legendBtn.textContent = t('statusLegend'); legendBtn.title = t('statusLegendTitle'); }
   const spc = document.getElementById('btn-spclose'); if (spc) spc.title = t('closeSponsors');
+  const prv = document.getElementById('privacy-btn'); if (prv) prv.textContent = t('privacy');
   const lang = document.getElementById('btn-lang'); if (lang) { lang.textContent = uiLang === 'pl' ? 'EN' : 'PL'; lang.title = t('langTitle'); }
   const fs = document.getElementById('btn-fs'); if (fs) fs.title = t('fsTitle');
 }
@@ -1520,6 +1565,58 @@ function closeLegend(e){
   const ov = document.getElementById('legend-ov');
   if(e.target === ov) ov.classList.remove('open');
 }
+
+
+function privacyContentRows(){
+  if (uiLang === 'en') return {
+    intro:'This page shows live and final sports results for the event.',
+    rows:[
+      ['Controller', 'Lekkoatletyczny Klub Sportowy Korab and Miejski Ośrodek Sportu i Rekreacji w Olecku, ul. Park 1, 19-400 Olecko.'],
+      ['Contact', 'ultra.wiewiora.olecko@gmail.com'],
+      ['Displayed data', 'Start number, runner name, city/team, country/flag, gender, status, completed loops, distance and lap times.'],
+      ['Purpose', 'Publishing live results, event classification and sports statistics.'],
+      ['Source', 'Start list and timing/checkpoint data entered by the event staff.'],
+      ['Cookies', 'The page does not use tracking cookies. Local storage may only remember interface settings during use.'],
+      ['External services', 'Data may be loaded from Google Sheets and the page may be hosted on GitHub Pages or another static hosting service.'],
+      ['Corrections', 'For correction or privacy requests, contact the event organiser.']
+    ]
+  };
+  return {
+    intro:'Ta strona pokazuje wyniki live i wyniki końcowe zawodów sportowych.',
+    rows:[
+      ['Administrator', 'Lekkoatletyczny Klub Sportowy Korab oraz Miejski Ośrodek Sportu i Rekreacji w Olecku, ul. Park 1, 19-400 Olecko.'],
+      ['Kontakt', 'ultra.wiewiora.olecko@gmail.com'],
+      ['Zakres danych', 'Numer startowy, imię i nazwisko zawodnika, miejscowość/drużyna, kraj/flaga, płeć, status, liczba pętli, dystans i czasy pętli.'],
+      ['Cel', 'Publikacja wyników live, klasyfikacji zawodów i statystyk sportowych.'],
+      ['Źródło', 'Lista startowa oraz dane pomiarowe wprowadzane przez obsługę zawodów.'],
+      ['Cookies', 'Strona nie używa śledzących cookies. LocalStorage może służyć wyłącznie do ustawień interfejsu w trakcie korzystania ze strony.'],
+      ['Usługi zewnętrzne', 'Dane mogą być pobierane z Google Sheets, a strona może być hostowana np. na GitHub Pages lub innym hostingu statycznym.'],
+      ['Sprostowanie danych', 'W sprawie korekty lub prywatności skontaktuj się z organizatorem zawodów.']
+    ]
+  };
+}
+function openPrivacy(){
+  const title = document.getElementById('privacy-title');
+  const subtitle = document.getElementById('privacy-subtitle');
+  const body = document.getElementById('privacy-body');
+  if(!body) return;
+  const data = privacyContentRows();
+  title.textContent = t('privacyTitle');
+  subtitle.textContent = t('privacySubtitle');
+  body.innerHTML = `<div class="privacy-text">
+    <p>${esc(data.intro)}</p>
+    <div class="privacy-list">
+      ${data.rows.map(([k,v]) => `<div class="privacy-item"><div class="privacy-k">${esc(k)}</div><div class="privacy-v">${esc(v)}</div></div>`).join('')}
+    </div>
+  </div>`;
+  document.getElementById('privacy-ov').classList.add('open');
+  requestAnimationFrame(() => { body.scrollTop = 0; });
+}
+function closePrivacy(e){
+  const ov = document.getElementById('privacy-ov');
+  if(e.target === ov) ov.classList.remove('open');
+}
+
 
 function toggleLang(){
   uiLang = uiLang === 'pl' ? 'en' : 'pl';
