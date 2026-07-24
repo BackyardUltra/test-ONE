@@ -1021,19 +1021,18 @@ async function fetchData(){
     // Google Published Sheets potrafi przez chwilę podać starszą wersję CSV z cache.
     // Nie przyjmujemy danych starszych niż aktualnie pokazane na ekranie.
     if (rows.length && isStaleIncomingData_(rowMeta, freshMeta, meta)) {
-      toast('↺ Google podał starszy eksport — zostawiam aktualny widok');
       return;
     }
 
     rows = freshRows;
     meta = freshMeta;
     applyMeta(meta); normalizeRows(); buildStats(); buildTimeline(); render(); setStickyTop();
-    if (prevHash !== null && hash !== prevHash) toast('✓ Dane zaktualizowane');
+    if (prevHash !== null && hash !== prevHash) toast(uiLang === 'pl' ? '✓ Uaktualniono' : '✓ Updated');
     prevHash = hash;
   } catch(e) {
     console.error(e);
     if (rows.length) {
-      toast('⚠️ Chwilowy problem z odświeżeniem — zostawiam poprzednie dane');
+      toast(uiLang === 'pl' ? '⚠️ Chwilowy problem z odświeżeniem' : '⚠️ Temporary refresh problem');
       return;
     }
     showTableMessage('⚠️ Błąd przetwarzania/pobierania danych.<br><small>' + esc(e.message || e) + '</small>');
@@ -1393,7 +1392,10 @@ function buildTimeline(){
     const langPl = uiLang === 'pl';
     const lp = langPl ? `${loop} p.` : `${loop} laps`;
     if(type === 'km') return `${lp}\n${text}`;
-    if(type === 'day') return langPl ? `${lp}\n${text.replace(/^\d+\.\s*/, '')}` : `${lp}\n${text.replace(/^\d+\.\s*/, 'day ')}`;
+    if(type === 'day') {
+      const dayNo = Math.max(1, Math.round(Number(loop) / 24));
+      return langPl ? `${lp}\n${dayNo}. doba` : `${lp}\nDay ${dayNo}`;
+    }
     if(type === 'current') return langPl ? `Teraz\n${lp}` : `Now\n${lp}`;
     if(type === 'start') return langPl ? 'Start\n0 p.' : 'Start\n0 laps';
     if(type === 'women') return langPl ? `${lp}\nKobiety` : `${lp}\nWomen`;
@@ -1431,7 +1433,7 @@ function buildTimeline(){
   const dayMarkers = [];
   for(let d = 1; d * 24 < worldLoop; d++){
     const loop = d * 24;
-    const dayText = `${d}. ${t('day') || 'doba'}`;
+    const dayText = uiLang === 'pl' ? `${d}. doba` : `Day ${d}`;
     dayMarkers.push({
       key:`day${d}`,
       loop,
