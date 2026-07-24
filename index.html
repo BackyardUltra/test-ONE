@@ -1092,7 +1092,7 @@ const CONFIG = {
   csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmB8mscDBKYlCZT0-xCviLLzGwJPmpCihnZ4LvOuqRlKs8-LIa7XDv9o-xiD93mCjAKOPf5i5y06AV/pub?gid=1782259513&single=true&output=csv',
   metaSheetName: 'META_HTML',
   metaCsvUrl: '',
-  refreshSec: 60,
+  refreshSec: 30,
   kmPerLoopFallback: 6.706,
   eventNameOverride: '',
   eventSubtitleOverride: '',
@@ -1170,6 +1170,8 @@ initStatic();
 fetchData();
 setInterval(refreshCountdown, 1000);
 setInterval(updateRaceClock, 1000);
+window.addEventListener('focus', () => { countdown = Math.min(countdown, 3); });
+document.addEventListener('visibilitychange', () => { if(!document.hidden){ countdown = 1; } });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('ov').classList.remove('open'); document.getElementById('legend-ov').classList.remove('open'); document.getElementById('privacy-ov').classList.remove('open'); } });
 document.addEventListener('fullscreenchange', () => { const b=document.getElementById('btn-fs'); if(b) b.textContent='⛶'; });
 
@@ -1222,7 +1224,7 @@ async function fetchData(){
 
     // Google Published Sheets potrafi przez chwilę podać starszą wersję CSV z cache.
     // Nie przyjmujemy danych starszych niż aktualnie pokazane na ekranie.
-    if (rows.length && isStaleIncomingData_(rowMeta, freshMeta, meta)) {
+    if (rows.length && isStaleIncomingData_(rowMeta, freshMeta, meta, freshRows, rows)) {
       return;
     }
 
@@ -1330,14 +1332,29 @@ function metaTimeMs_(m){
   const d = parseDate((m && m.lastUpdate) || '');
   return d ? d.getTime() : 0;
 }
-function isStaleIncomingData_(rowMeta, freshMeta, currentMeta){
-  const currentTime = metaTimeMs_(currentMeta);
-  const incomingTime = metaTimeMs_(rowMeta) || metaTimeMs_(freshMeta);
-  if (currentTime && incomingTime && incomingTime < currentTime - 15000) return true;
-
+function loopsSum_(data){
+  return (data || []).reduce((sum, r) => sum + (int(r[COL.loops]) || 0), 0);
+}
+function loopsMax_(data){
+  const vals = (data || []).map(r => int(r[COL.loops]) || 0);
+  return vals.length ? Math.max(...vals) : 0;
+}
+function isStaleIncomingData_(rowMeta, freshMeta, currentMeta, incomingRows, currentRows){
   const currentLoop = int(currentMeta && currentMeta.activeLoop);
-  const incomingLoop = int(rowMeta && rowMeta.activeLoop) || int(freshMeta && freshMeta.activeLoop);
+  const incomingLoop = Math.max(int(rowMeta && rowMeta.activeLoop) || 0, int(freshMeta && freshMeta.activeLoop) || 0);
   if (currentLoop && incomingLoop && incomingLoop < currentLoop) return true;
+
+  const incomingMax = loopsMax_(incomingRows);
+  const currentMax = loopsMax_(currentRows);
+  if (incomingMax < currentMax) return true;
+
+  const incomingTotal = loopsSum_(incomingRows);
+  const currentTotal = loopsSum_(currentRows);
+  if (incomingMax === currentMax && incomingTotal < currentTotal) return true;
+
+  const currentTime = metaTimeMs_(currentMeta);
+  const incomingTime = Math.max(metaTimeMs_(rowMeta), metaTimeMs_(freshMeta));
+  if (currentTime && incomingTime && incomingTime < currentTime - 60000 && incomingTotal <= currentTotal) return true;
 
   return false;
 }
@@ -2004,12 +2021,73 @@ function durationToSec(v){
   if(!m) return 0;
   return Number(m[1])*3600 + Number(m[2])*60 + Number(m[3]);
 }
+function buildStandalonePrintReport(){
+  const eventName = CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra';
+  const subtitle = meta.eventSubtitle || CONFIG.eventSubtitleOverride || 'Wyniki zawodów';
+  const updated = formatDateTime(meta.lastUpdate) || new Date().toLocaleString(uiLang === 'en' ? 'en-GB' : 'pl-PL');
+  const activeLoop = meta.activeLoop || (rows.length ? Math.max(...rows.map(r => r._loops || 0)) : '–');
+  const starters = rows.filter(r => r._status !== 'DNS').length;
+  const active = rows.filter(r => r._status === 'RUN').length;
+  const out = rows.filter(r => !['RUN','DNS'].includes(r._status)).length;
+  const maxLoop = rows.length ? Math.max(...rows.map(r => r._loops || 0)) : 0;
+  const totalKm = rows.reduce((sum,r) => sum + (Number(r._distance) || 0), 0);
+  const data = [...rows].sort(defaultLiveCompare);
+  const reportTitle = uiLang === 'en' ? 'Race results' : 'Wyniki zawodów';
+  const generated = uiLang === 'en' ? 'Generated from live data' : 'Wygenerowano z danych live';
+  const cols = uiLang === 'en'
+    ? ['Pos.','Bib','Runner','Sex','Country','Status','Loops','Distance','Last lap','Best lap','Worst lap','Total','PB']
+    : ['Msc.','Nr','Zawodnik','Płeć','Kraj','Status','Pętle','Dystans','Ostatnia','Najlepsza','Najgorsza','Suma','PB'];
+  const summary = uiLang === 'en'
+    ? [['Loop', activeLoop || '–'], ['Max loops', maxLoop], ['Starters', starters], ['Active', active], ['Out', out], ['Total distance', `${formatKm(totalKm)} km`]]
+    : [['Pętla', activeLoop || '–'], ['Najwięcej pętli', maxLoop], ['Startujący', starters], ['Aktywni', active], ['Odpadło', out], ['Suma dystansu', `${formatKm(totalKm)} km`]];
+  const rowsHtml = data.map(r => {
+    const sub = [r[COL.city], r[COL.team]].filter(Boolean).join(' · ');
+    const status = String(r._status || r[COL.status] || '').toUpperCase();
+    const gender = formatGender(r[COL.gender]);
+    const genderShort = uiLang === 'en'
+      ? (String(gender).toLowerCase().startsWith('female') ? 'F' : String(gender).toLowerCase().startsWith('male') ? 'M' : gender || '–')
+      : (String(gender).toLowerCase().startsWith('kob') ? 'K' : String(gender).toLowerCase().startsWith('męż') ? 'M' : gender || '–');
+    const pb = formatPB(r) || '–';
+    return `<tr>
+      <td class="pos">${esc(r._place || '–')}</td>
+      <td class="bib">${esc(r[COL.bib] || '–')}</td>
+      <td class="runner"><strong>${esc(r[COL.name] || '–')}</strong>${sub ? `<small>${esc(sub)}</small>` : ''}</td>
+      <td class="center">${esc(genderShort)}</td>
+      <td class="center">${esc((r[COL.country] || '').toString().toUpperCase() || '–')}</td>
+      <td class="center"><span class="badge ${esc(status.toLowerCase())}">${esc(status || '–')}</span></td>
+      <td class="loops">${esc(r._loops || 0)}</td>
+      <td class="num">${esc(formatKm(r._distance))} km</td>
+      <td class="time">${esc(formatDuration(r[COL.lastLap]) || '–')}</td>
+      <td class="time">${esc(formatDuration(r[COL.bestLap]) || '–')}</td>
+      <td class="time">${esc(formatDuration(r[COL.worstLap]) || '–')}</td>
+      <td class="time">${esc(formatDuration(r[COL.totalTime]) || '–')}</td>
+      <td class="center">${esc(pb)}</td>
+    </tr>`;
+  }).join('');
+  const summaryHtml = summary.map(([k,v]) => `<div><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(eventName)} - wyniki</title>
+  <style>
+  @page{size:A4 landscape;margin:9mm 8mm 10mm}*{box-sizing:border-box}body{margin:0;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif}.sheet{width:100%;padding:0}.top{display:grid;grid-template-columns:20mm 1fr 62mm;gap:5mm;align-items:center;border-bottom:3px solid #111;padding-bottom:4mm}.logo{width:19mm;height:19mm;border-radius:50%;object-fit:cover}.kicker{font-size:8pt;color:#d45a00;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1mm}h1{margin:0;font-size:22pt;line-height:1.03;text-transform:uppercase;letter-spacing:.015em}.subtitle{font-size:9pt;font-weight:700;color:#555;margin-top:1.5mm}.side{border-left:1px solid #ccc;padding-left:4mm;font-size:8pt}.side div{display:flex;justify-content:space-between;gap:5mm;padding:.7mm 0}.side span{color:#777;text-transform:uppercase;font-weight:800;letter-spacing:.06em}.side strong{text-align:right}.summary{display:grid;grid-template-columns:repeat(6,1fr);border:1.5px solid #111;border-left:0;margin:4mm 0 3.5mm}.summary div{border-left:1.5px solid #111;padding:2mm 2.2mm;min-height:12mm}.summary span{display:block;color:#666;font-size:6.5pt;text-transform:uppercase;font-weight:900;letter-spacing:.08em;margin-bottom:1mm}.summary strong{font-size:12.5pt;font-weight:900;white-space:nowrap}.result-title{font-size:9pt;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin:0 0 1.5mm;color:#111}.result-title:after{content:'';display:block;height:1px;background:#111;margin-top:1mm}table{width:100%;border-collapse:collapse;table-layout:fixed;border:1.5px solid #111}thead{display:table-header-group}th{background:#111;color:#fff;font-size:6.7pt;padding:1.8mm 1.1mm;text-transform:uppercase;letter-spacing:.035em;text-align:left;border-right:.5px solid #555;white-space:nowrap}td{font-size:7.5pt;padding:1.35mm 1.1mm;border-right:.5px solid #ddd;border-bottom:.5px solid #d8d8d8;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}tbody tr:nth-child(even) td{background:#f4f4f4}.pos{width:5%;text-align:center;font-weight:900}.bib{width:5%;text-align:center;font-weight:800}.runner{width:24%}.runner strong{display:block;font-size:8.4pt;line-height:1.04;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.runner small{display:block;font-size:6.2pt;color:#555;margin-top:.6mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.center{text-align:center}.loops{text-align:center;font-weight:900;font-size:8.6pt}.num{text-align:right;font-weight:800}.time{text-align:center;font-family:'Courier New',monospace;font-size:7.3pt}.badge{display:inline-block;min-width:12mm;border:1px solid #777;border-radius:2mm;padding:.6mm 1.1mm;font-size:6.2pt;font-weight:900;letter-spacing:.03em}.run{color:#087a37;border-color:#087a37;background:#eef9f2}.win{color:#8a6500;border-color:#b98700;background:#fff8dc}.rtc{color:#0b5e92;border-color:#0b5e92;background:#eaf5ff}.dnc{color:#666;border-color:#888;background:#f0f0f0}.over{color:#8d3c00;border-color:#bb5200;background:#fff0e5}.dns{color:#555;border-color:#888;background:#eee}.dsq{color:#c00000;border-color:#c00000;background:#ffecec}.foot{display:flex;justify-content:space-between;gap:8mm;border-top:1px solid #ccc;margin-top:3mm;padding-top:2mm;font-size:6.6pt;color:#666}.foot strong{color:#111}@media screen{body{background:#ddd}.sheet{background:#fff;max-width:297mm;min-height:210mm;margin:12px auto;padding:9mm 8mm;box-shadow:0 4px 24px rgba(0,0,0,.18)}}
+  </style></head><body><main class="sheet"><header class="top"><img class="logo" src="${esc(CONFIG.logoUrl || '')}"><div><div class="kicker">${esc(reportTitle)}</div><h1>${esc(eventName)}</h1><div class="subtitle">${esc(subtitle)}</div></div><div class="side"><div><span>${uiLang === 'en' ? 'Updated' : 'Aktualizacja'}</span><strong>${esc(updated)}</strong></div><div><span>${uiLang === 'en' ? 'Loop' : 'Pętla'}</span><strong>${esc(activeLoop || '–')}</strong></div><div><span>${uiLang === 'en' ? 'Lap distance' : 'Dystans pętli'}</span><strong>${esc(formatKm(meta.lapDistance || meta.lapDistanceKm || CONFIG.kmPerLoopFallback))} km</strong></div></div></header><section class="summary">${summaryHtml}</section><h2 class="result-title">${esc(reportTitle)}</h2><table><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rowsHtml}</tbody></table><footer class="foot"><span><strong>Status:</strong> ${uiLang === 'en' ? 'RUN = active, RTC/DNC/OVER/DSQ = not active. Completed loops remain visible.' : 'RUN = zawodnik aktywny, RTC/DNC/OVER/DSQ = zawodnik nieaktywny. Ukończone pętle pozostają widoczne.'}</span><span>${esc(generated)}</span></footer></main><script>window.addEventListener('load',()=>setTimeout(()=>{window.focus();window.print();},350));<\/script></body></html>`;
+}
 function downloadPDF(){
-  const oldTitle = document.title;
-  preparePrintReport();
-  document.title = (CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra') + ' - wyniki';
-  window.print();
-  setTimeout(() => { document.title = oldTitle; }, 500);
+  if(!rows.length){ toast(uiLang === 'pl' ? 'Brak danych do PDF' : 'No data for PDF'); return; }
+  try {
+    const report = buildStandalonePrintReport();
+    const w = window.open('', '_blank', 'width=1200,height=800');
+    if(!w){
+      preparePrintReport();
+      window.print();
+      return;
+    }
+    w.document.open();
+    w.document.write(report);
+    w.document.close();
+  } catch(e){
+    console.error(e);
+    preparePrintReport();
+    window.print();
+  }
 }
 function setStickyTop(){
   const top = document.querySelector('.live-top');
