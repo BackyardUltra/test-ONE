@@ -176,6 +176,7 @@ body.timeline-hidden .timeline {
   margin-bottom:.10rem;
 }
 .timeline-head strong { color:var(--orange2); font-family:'JetBrains Mono',monospace; letter-spacing:.03em; }
+.timeline-current-status { display:none !important; }
 .timeline-track {
   position:relative; height:88px; margin:0 2.5rem;
 }
@@ -201,7 +202,7 @@ body.timeline-hidden .timeline {
 .edge-right .tl-dot { left:auto; right:0; transform:none; }
 .tl-label {
   position:absolute; left:50%; transform:translateX(-50%);
-  white-space:normal; min-width:62px; max-width:106px; font-size:.82rem; line-height:1.12;
+  white-space:normal; min-width:68px; max-width:118px; font-size:.90rem; line-height:1.10;
   color:var(--muted); letter-spacing:.01em; text-align:center; overflow-wrap:normal;
 }
 .edge-left .tl-label { left:0; transform:none; text-align:left; }
@@ -212,6 +213,9 @@ body.timeline-hidden .timeline {
 .tl-current .tl-dot { border-color:rgba(46,204,113,.8); box-shadow:0 0 0 1px rgba(46,204,113,.55), 0 0 12px rgba(46,204,113,.45); }
 .tl-current .tl-label { color:var(--green); font-weight:700; }
 .tl-record .tl-dot { border-color:rgba(255,122,0,.65); }
+.tl-org .tl-dot { border-color:rgba(255,122,0,.65); }
+.tl-warning .tl-dot { border-color:rgba(255,70,70,.75); box-shadow:0 0 0 1px rgba(255,70,70,.35), 0 0 10px rgba(255,70,70,.25); }
+.tl-poland .tl-dot { border-color:rgba(255,255,255,.75); box-shadow:0 0 0 1px rgba(220,20,60,.35), 0 0 10px rgba(220,20,60,.25); }
 .tl-km .tl-dot { border-color:rgba(170,170,170,.55); }
 .tl-world .tl-dot { border-color:rgba(255,216,74,.75); box-shadow:0 0 0 1px rgba(255,216,74,.35), 0 0 10px rgba(255,216,74,.30); }
 .tl-day .tl-dot { border-color:rgba(93,173,226,.65); }
@@ -633,12 +637,12 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   .timeline { padding:.32rem .55rem .34rem; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; }
   .timeline::-webkit-scrollbar { height:4px; }
   .timeline::-webkit-scrollbar-thumb { background:var(--border2); border-radius:999px; }
-  .timeline-head { min-width:1060px; font-size:.88rem; }
-  .timeline-track { height:84px; min-width:1060px; margin:0 1.25rem; }
+  .timeline-head { min-width:1180px; font-size:.92rem; }
+  .timeline-track { height:88px; min-width:1180px; margin:0 1.25rem; }
   .timeline-track::before, .timeline-fill { top:42px; height:4px; }
-  .tl-marker { height:84px; }
+  .tl-marker { height:88px; }
   .tl-dot { top:30px; width:25px; height:25px; font-size:.98rem; }
-  .tl-label { max-width:98px; min-width:62px; font-size:.80rem; line-height:1.12; }
+  .tl-label { max-width:110px; min-width:70px; font-size:.92rem; line-height:1.10; }
   .tl-below .tl-label { top:61px; }
   .tl-above .tl-label { top:1px; }
 
@@ -783,7 +787,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 <div class="timeline" id="timeline">
   <div class="timeline-head">
     <span id="lbl-timeline">Oś czasu</span>
-    <span><span id="lbl-timeline-current">Aktualna pętla:</span> <strong id="timeline-current">–</strong></span>
+    <span class="timeline-current-status"><span id="lbl-timeline-current">Aktualna pętla:</span> <strong id="timeline-current">–</strong></span>
   </div>
   <div class="timeline-track" id="timeline-track">
     <div class="timeline-fill" id="timeline-fill"></div>
@@ -876,7 +880,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 
 <script>
 /* =========================================================
-   OLECKO LIVE SCOREBOARD v7.26 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
+   OLECKO LIVE SCOREBOARD v7.29 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
    Do podmiany przed publikacją:
    1) CONFIG.csvUrl — link CSV opublikowanej zakładki WYNIKI_HTML
    2) metaCsvUrl opcjonalnie — domyślnie próbuje czytać META_HTML po nazwie arkusza
@@ -899,7 +903,10 @@ const CONFIG = {
     records: {
       womenCourse: 18,
       course: 35,
-      league2026: 53,
+      orgMichal: 24,
+      orgNorbert: 51,
+      league2026: 57,
+      poland: 116,
       world: 119
     },
     distanceMarkersKm: [50, 100, 200, 500]
@@ -933,7 +940,7 @@ const I18N = {
     completed:'ukończone', totalKm:'km łącznie', runnerData:'Dane zawodnika', lapTimes:'Czasy pętli', completedLaps:'ukończonych',
     gender:'Płeć', city:'Miasto', team:'Drużyna', worstLap:'Najgorsza pętla', avgLap:'Średnia pętla', totalTime:'Suma czasów', rest:'Suma odpoczynku', pbLoops:'PB pętle', workingPlace:'Poz.', lapNote:'Czas = czas pętli. Odp. = odpoczynek od mety pętli do startu kolejnej.', lapTimeShort:'czas', restShort:'odp.',
     timeline:'Oś czasu', statusLegend:'Statusy', statusLegendTitle:'Legenda statusów', statusLegendSubtitle:'Co oznaczają skróty przy zawodnikach?', privacy:'Polityka prywatności', privacyTitle:'Polityka prywatności', privacySubtitle:'Dane w wynikach live', currentLoop:'Aktualna pętla:', timelineTitle:'Pokaż / ukryj oś czasu', sponsorsTitle:'Pokaż / ukryj sponsorów', closeSponsors:'Zamknij baner sponsorów',
-    start:'Start', now:'Teraz', day1:'1. doba', day2:'2. doba', womenRecord:'Rekord trasy kobiet', courseRecord:'Rekord trasy', leagueRecord:'Rekord ligi 2026', worldRecord:'Rekord świata', day:'doba'
+    start:'Start', now:'Teraz', day1:'1. doba', day2:'2. doba', womenRecord:'Rekord trasy kobiet', courseRecord:'Rekord trasy', leagueRecord:'Rekord ligi 2026', worldRecord:'Rekord świata', polandRecord:'Rekord Polski', orgMichalRecord:'Rekord organizatora Michała', orgNorbertRecord:'Rekord organizatora Norberta', riskNote:'Pobicie rekordu na własne ryzyko', day:'doba'
   },
   en: {
     record:'Record:', loopNo:'Loop no.:', starters:'Starters:', active:'Active:', dropped:'Out:', refreshIn:'Refresh in', sponsors:'Sponsors',
@@ -943,13 +950,14 @@ const I18N = {
     completed:'completed', totalKm:'total km', runnerData:'Runner data', lapTimes:'Lap times', completedLaps:'completed',
     gender:'Gender', city:'City', team:'Team', worstLap:'Worst lap', avgLap:'Average lap', totalTime:'Total time', rest:'Total rest', pbLoops:'PB loops', workingPlace:'Pos.', lapNote:'Lap = lap time. Rest = time from finishing a lap to the next lap start.', lapTimeShort:'lap', restShort:'rest',
     timeline:'Timeline', statusLegend:'Statuses', statusLegendTitle:'Status legend', statusLegendSubtitle:'What do the runner status abbreviations mean?', privacy:'Privacy policy', privacyTitle:'Privacy policy', privacySubtitle:'Live results data', currentLoop:'Current loop:', timelineTitle:'Show / hide timeline', sponsorsTitle:'Show / hide sponsors', closeSponsors:'Close sponsors banner',
-    start:'Start', now:'Now', day1:'Day 1', day2:'Day 2', womenRecord:'Women course record', courseRecord:'Course record', leagueRecord:'League record 2026', worldRecord:'World record', day:'day'
+    start:'Start', now:'Now', day1:'Day 1', day2:'Day 2', womenRecord:'Women course record', courseRecord:'Course record', leagueRecord:'League record 2026', worldRecord:'World record', polandRecord:'Polish record', orgMichalRecord:'Organizer Michał record', orgNorbertRecord:'Organizer Norbert record', riskNote:'Beat at your own risk', day:'day'
   }
 };
 function t(k){ return (I18N[uiLang] && I18N[uiLang][k]) || I18N.pl[k] || k; }
 
 
 let rows = [], meta = {}, sortKey = COL.place, sortDir = 1, countdown = CONFIG.refreshSec, prevHash = null;
+let fetchInProgress = false;
 let uiLang = 'pl';
 let lastScrollState = false;
 let timelineVisible = true;
@@ -983,9 +991,11 @@ function initStatic(){
 
 
 async function fetchData(){
+  if (fetchInProgress) return;
+  fetchInProgress = true;
   if (!CONFIG.csvUrl || CONFIG.csvUrl.includes('TU_WKLEJ')) {
     showTableMessage('⚠️ Brak linku CSV.<br><small>Wklej link do opublikowanej zakładki BU_PUBLIC_DATA &gt; WYNIKI_HTML w CONFIG.csvUrl.</small>');
-    applyMeta({}); return;
+    applyMeta({}); fetchInProgress = false; return;
   }
   try {
     const baseCsvUrl = normalizePublishedCsvUrl(CONFIG.csvUrl);
@@ -1003,10 +1013,19 @@ async function fetchData(){
       throw new Error('Pusty lub niepełny CSV — zostawiam poprzednie wyniki.');
     }
 
-    rows = freshRows;
-    const rowMeta = readMeta(rows);
+    const rowMeta = readMeta(freshRows);
     const sheetMeta = await fetchMetaSheet(baseCsvUrl).catch(err => { console.warn('META_HTML fetch failed', err); return {}; });
-    meta = mergeMeta_(rowMeta, sheetMeta);
+    const freshMeta = mergeMeta_(rowMeta, sheetMeta);
+
+    // Google Published Sheets potrafi przez chwilę podać starszą wersję CSV z cache.
+    // Nie przyjmujemy danych starszych niż aktualnie pokazane na ekranie.
+    if (rows.length && isStaleIncomingData_(rowMeta, freshMeta, meta)) {
+      toast('↺ Google podał starszy eksport — zostawiam aktualny widok');
+      return;
+    }
+
+    rows = freshRows;
+    meta = freshMeta;
     applyMeta(meta); normalizeRows(); buildStats(); buildTimeline(); render(); setStickyTop();
     if (prevHash !== null && hash !== prevHash) toast('✓ Dane zaktualizowane');
     prevHash = hash;
@@ -1017,6 +1036,8 @@ async function fetchData(){
       return;
     }
     showTableMessage('⚠️ Błąd przetwarzania/pobierania danych.<br><small>' + esc(e.message || e) + '</small>');
+  } finally {
+    fetchInProgress = false;
   }
 }
 
@@ -1101,6 +1122,22 @@ function mergeMeta_(rowMeta, sheetMeta){
     if(v !== '' && v !== null && v !== undefined) out[k] = v;
   });
   return out;
+}
+
+function metaTimeMs_(m){
+  const d = parseDate((m && m.lastUpdate) || '');
+  return d ? d.getTime() : 0;
+}
+function isStaleIncomingData_(rowMeta, freshMeta, currentMeta){
+  const currentTime = metaTimeMs_(currentMeta);
+  const incomingTime = metaTimeMs_(rowMeta) || metaTimeMs_(freshMeta);
+  if (currentTime && incomingTime && incomingTime < currentTime - 15000) return true;
+
+  const currentLoop = int(currentMeta && currentMeta.activeLoop);
+  const incomingLoop = int(rowMeta && rowMeta.activeLoop) || int(freshMeta && freshMeta.activeLoop);
+  if (currentLoop && incomingLoop && incomingLoop < currentLoop) return true;
+
+  return false;
 }
 
 function parseCSV(txt){
@@ -1331,6 +1368,11 @@ function normalizeTimelineLapDistance_(value){
   return d;
 }
 
+function distanceIcon_(km){
+  // Jeden neutralny znak dla dystansów, żeby nie konkurował z rekordami na osi.
+  return '📍';
+}
+
 function buildTimeline(){
   const track = document.getElementById('timeline-track');
   const legend = document.getElementById('timeline-legend');
@@ -1348,13 +1390,16 @@ function buildTimeline(){
 
   const shortLabel = (type, loop, text) => {
     const langPl = uiLang === 'pl';
-    if(type === 'km') return langPl ? `${text}\n${loop} p.` : `${text}\n${loop} laps`;
+    if(type === 'km') return langPl ? `${loop} p.\n${text}` : `${loop} laps\n${text}`;
     if(type === 'day') return langPl ? `${loop} p.\n${text}` : `${loop} laps\n${text}`;
     if(type === 'current') return langPl ? `Teraz\n${loop} p.` : `Now\n${loop} laps`;
     if(type === 'start') return langPl ? 'Start\n0 p.' : 'Start\n0 laps';
     if(type === 'women') return langPl ? `${loop} p.\nrek. kobiet` : `${loop} laps\nwomen rec.`;
+    if(type === 'orgMichal') return langPl ? `${loop} p.\nrek. Michała` : `${loop} laps\nMichał rec.`;
     if(type === 'course') return langPl ? `${loop} p.\nrek. trasy` : `${loop} laps\ncourse rec.`;
+    if(type === 'orgNorbert') return langPl ? `${loop} p.\nrek. Norberta` : `${loop} laps\nNorbert rec.`;
     if(type === 'league') return langPl ? `${loop} p.\nliga 2026` : `${loop} laps\nleague 2026`;
+    if(type === 'poland') return langPl ? `${loop} p.\nrek. Polski` : `${loop} laps\nPolish rec.`;
     if(type === 'world') return langPl ? `${loop} p.\nrek. świata` : `${loop} laps\nworld rec.`;
     return `${loop}`;
   };
@@ -1366,7 +1411,7 @@ function buildTimeline(){
       loop,
       label:`${km} km`,
       cls:'tl-km',
-      icon:'📏',
+      icon:distanceIcon_(km),
       short: shortLabel('km', loop, `${km} km`)
     };
   });
@@ -1397,15 +1442,21 @@ function buildTimeline(){
 
   const womenLoop = records.womenCourse || 20;
   const courseLoop = records.course || 35;
-  const leagueLoop = records.league2026 || 53;
+  const orgMichalLoop = records.orgMichal || 24;
+  const orgNorbertLoop = records.orgNorbert || 51;
+  const leagueLoop = records.league2026 || 57;
+  const polandLoop = records.poland || 116;
   const markerData = [
     {key:'start', loop:0, label:t('start'), cls:'tl-start', icon:'🚦', short:shortLabel('start', 0)},
     ...(current > 0 ? [{key:'current', loop:current, label:`${t('currentLoop')} ${current}`, cls:'tl-current', icon:'📍', short:shortLabel('current', current)}] : []),
     ...distanceMarkers,
     {key:'women', loop:womenLoop, label:t('womenRecord'), cls:'tl-record', icon:'👩', short:shortLabel('women', womenLoop)},
+    {key:'orgMichal', loop:orgMichalLoop, label:t('orgMichalRecord'), cls:'tl-org', icon:'🧢', short:shortLabel('orgMichal', orgMichalLoop)},
     ...dayMarkers,
     {key:'course', loop:courseLoop, label:t('courseRecord'), cls:'tl-record', icon:'🏁', short:shortLabel('course', courseLoop)},
+    {key:'orgNorbert', loop:orgNorbertLoop, label:`${t('orgNorbertRecord')} — ${t('riskNote')}`, cls:'tl-warning', icon:'⚠️', short:shortLabel('orgNorbert', orgNorbertLoop)},
     {key:'league', loop:leagueLoop, label:t('leagueRecord'), cls:'tl-record', icon:'🏆', short:shortLabel('league', leagueLoop)},
+    {key:'poland', loop:polandLoop, label:t('polandRecord'), cls:'tl-poland', icon:'🇵🇱', short:shortLabel('poland', polandLoop)},
     {key:'world', loop:worldLoop, label:t('worldRecord'), cls:'tl-world', icon:'🌍', short:shortLabel('world', worldLoop)}
   ].filter(m => m.loop !== '' && m.loop !== null && m.loop !== undefined && Number(m.loop) >= 0)
    .sort((a,b) => Number(a.loop) - Number(b.loop));
@@ -1422,7 +1473,7 @@ function buildTimeline(){
     const el = document.createElement('div');
     el.className = `tl-marker ${m.cls} ${lane}${edge}`;
     el.style.left = p + '%';
-    el.title = `${m.label}: ${Math.round(Number(m.loop))} pętli`;
+    el.title = uiLang === 'pl' ? `${m.label}: ${Math.round(Number(m.loop))} pętli` : `${m.label}: ${Math.round(Number(m.loop))} laps`;
     el.innerHTML = `<span class="tl-dot">${esc(m.icon || '•')}</span><span class="tl-label">${esc(m.short || m.label).replace(/\n/g,'<br>')}</span>`;
     track.appendChild(el);
   });
@@ -1575,7 +1626,10 @@ function privacyContentRows(){
       ['Contact', 'ultra.wiewiora.olecko@gmail.com'],
       ['Displayed data', 'Start number, runner name, city/team, country/flag, gender, status, completed loops, distance and lap times.'],
       ['Purpose', 'Publishing live results, event classification and sports statistics.'],
+      ['Legal basis', 'The data is processed based on the controller’s legitimate interest: organising the event, publishing sports results and keeping a results archive.'],
       ['Source', 'Start list and timing/checkpoint data entered by the event staff.'],
+      ['Retention', 'Results may be stored and published for as long as the event documentation and results archive are maintained.'],
+      ['Your rights', 'You may request access, correction, restriction of processing or object to processing by contacting the organiser.'],
       ['Cookies', 'The page does not use tracking cookies. Local storage may only remember interface settings during use.'],
       ['External services', 'Data may be loaded from Google Sheets and the page may be hosted on GitHub Pages or another static hosting service.'],
       ['Corrections', 'For correction or privacy requests, contact the event organiser.']
@@ -1588,7 +1642,10 @@ function privacyContentRows(){
       ['Kontakt', 'ultra.wiewiora.olecko@gmail.com'],
       ['Zakres danych', 'Numer startowy, imię i nazwisko zawodnika, miejscowość/drużyna, kraj/flaga, płeć, status, liczba pętli, dystans i czasy pętli.'],
       ['Cel', 'Publikacja wyników live, klasyfikacji zawodów i statystyk sportowych.'],
+      ['Podstawa prawna', 'Prawnie uzasadniony interes administratora: organizacja zawodów, publikacja wyników sportowych oraz prowadzenie archiwum wyników.'],
       ['Źródło', 'Lista startowa oraz dane pomiarowe wprowadzane przez obsługę zawodów.'],
+      ['Okres publikacji', 'Wyniki mogą być przechowywane i publikowane przez okres prowadzenia dokumentacji oraz archiwum wyników zawodów.'],
+      ['Prawa osoby', 'Przysługuje prawo dostępu do danych, sprostowania, ograniczenia przetwarzania oraz wniesienia sprzeciwu przez kontakt z organizatorem.'],
       ['Cookies', 'Strona nie używa śledzących cookies. LocalStorage może służyć wyłącznie do ustawień interfejsu w trakcie korzystania ze strony.'],
       ['Usługi zewnętrzne', 'Dane mogą być pobierane z Google Sheets, a strona może być hostowana np. na GitHub Pages lub innym hostingu statycznym.'],
       ['Sprostowanie danych', 'W sprawie korekty lub prywatności skontaktuj się z organizatorem zawodów.']
@@ -1694,7 +1751,7 @@ function getPBValue(row){
 function formatPBValue(row){ const pb = getPBValue(row); return pb > 0 ? String(pb) : '–'; }
 
 function mrow(k,v){ if(v === undefined || v === null || String(v).trim() === '' || String(v) === '–') return ''; return `<div class="mrow"><span class="mrow-k">${esc(k)}</span><span class="mrow-v">${esc(v)}</span></div>`; }
-function refreshCountdown(){ countdown--; const el = document.getElementById('rf-cd'); el.textContent = countdown + 's'; el.classList.toggle('urgent', countdown <= 10); if(countdown <= 0){ fetchData(); countdown = CONFIG.refreshSec; } }
+function refreshCountdown(){ countdown--; const el = document.getElementById('rf-cd'); if(el){ el.textContent = countdown + 's'; el.classList.toggle('urgent', countdown <= 10); } if(countdown <= 0){ fetchData(); countdown = CONFIG.refreshSec; } }
 function updateRaceClock(){
   const val = document.getElementById('clock-val'), lbl = document.getElementById('clock-lbl'), start = parseDate(meta.raceStart);
   if(start){ const sec = Math.max(0, Math.floor((Date.now() - start.getTime()) / 1000)); val.textContent = formatLongDuration(sec); lbl.textContent = t('raceTime'); }
