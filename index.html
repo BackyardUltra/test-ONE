@@ -547,7 +547,14 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   .print-report h1 { margin:0 0 2mm 0 !important; font-family:Arial, sans-serif !important; font-size:20pt !important; font-weight:800 !important; letter-spacing:.02em !important; line-height:1.08 !important; color:#111 !important; }
   .print-meta { margin-top:1mm !important; display:flex !important; justify-content:space-between !important; gap:10mm !important; font-size:8.5pt !important; color:#333 !important; }
   .print-meta strong { color:#111 !important; }
-  .twrap { padding:0 !important; overflow:visible !important; }
+  .print-topline { font-size:7pt !important; font-weight:700 !important; letter-spacing:.18em !important; color:#ff7a00 !important; margin:0 0 1.5mm 0 !important; text-transform:uppercase !important; }
+  .print-summary { display:grid !important; grid-template-columns:repeat(5, 1fr) !important; gap:2mm !important; margin:4mm 0 4mm 0 !important; }
+  .print-summary .ps-card { border:1px solid #d0d0d0 !important; border-left:3px solid #ff7a00 !important; padding:2mm 2.5mm !important; background:#fafafa !important; }
+  .print-summary .ps-k { display:block !important; font-size:6.6pt !important; color:#666 !important; text-transform:uppercase !important; letter-spacing:.08em !important; margin-bottom:.7mm !important; }
+  .print-summary .ps-v { display:block !important; font-size:11pt !important; line-height:1 !important; font-weight:800 !important; color:#111 !important; }
+  .twrap { display:none !important; }
+  .print-table { display:block !important; width:100% !important; }
+  .print-table table { display:table !important; width:100% !important; min-width:0 !important; border-collapse:collapse !important; border-spacing:0 !important; table-layout:fixed !important; }
   table { display:table !important; width:100% !important; min-width:0 !important; border-collapse:collapse !important; border-spacing:0 !important; table-layout:fixed !important; }
   thead { display:table-header-group !important; position:static !important; background:#fff !important; backdrop-filter:none !important; box-shadow:none !important; }
   tbody { display:table-row-group !important; padding-top:0 !important; }
@@ -575,6 +582,23 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   th:nth-child(8), td:nth-child(8) { width:11% !important; text-align:center !important; }
   th:nth-child(9), td:nth-child(9) { width:11% !important; text-align:center !important; }
   th:nth-child(10), td:nth-child(10) { width:7.5% !important; text-align:center !important; }
+  .print-table .p-pos { width:5.5% !important; text-align:center !important; }
+  .print-table .p-bib { width:6.5% !important; text-align:center !important; }
+  .print-table .p-name { width:27% !important; }
+  .print-table .p-country { width:8% !important; text-align:center !important; }
+  .print-table .p-status { width:8% !important; text-align:center !important; }
+  .print-table .p-loops { width:7% !important; text-align:center !important; }
+  .print-table .p-distance { width:11% !important; text-align:right !important; }
+  .print-table .p-time { width:11% !important; text-align:center !important; }
+  .print-table .p-topb { width:6% !important; text-align:center !important; }
+  .print-table .p-status-badge { display:inline-block !important; min-width:14mm !important; text-align:center !important; border-radius:3px !important; padding:1.2mm 2mm !important; font-weight:800 !important; font-size:6.8pt !important; border:1px solid #999 !important; background:#fff !important; color:#111 !important; }
+  .print-table .p-status-run { color:#087a37 !important; border-color:#087a37 !important; background:#eef9f2 !important; }
+  .print-table .p-status-win { color:#8a6500 !important; border-color:#bf8d00 !important; background:#fff8dc !important; }
+  .print-table .p-status-over,.print-table .p-status-dnc,.print-table .p-status-rtc { color:#9a4b00 !important; border-color:#c56c00 !important; background:#fff3e5 !important; }
+  .print-table .p-status-dns { color:#555 !important; border-color:#888 !important; background:#eee !important; }
+  .print-table .p-status-dsq { color:#c00000 !important; border-color:#c00000 !important; background:#ffecec !important; }
+  .print-table .p-name-main { display:block !important; font-weight:800 !important; color:#111 !important; line-height:1.1 !important; }
+  .print-table .p-name-sub { display:block !important; color:#666 !important; font-size:6.4pt !important; margin-top:.7mm !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
   .tmsg,.spin { display:none !important; }
 }
 
@@ -807,11 +831,14 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 </div>
 
 <section class="print-report" id="print-report">
+  <div class="print-topline">WYNIKI BACKYARD ULTRA</div>
   <h1 id="print-title">Backyard Ultra Wiewióra Olecko</h1>
   <div class="print-meta">
     <span id="print-subtitle">Wyniki zawodów</span>
     <span id="print-update">Aktualizacja: –</span>
   </div>
+  <div class="print-summary" id="print-summary"></div>
+  <div class="print-table" id="print-table"></div>
 </section>
 
 <div class="twrap">
@@ -1686,14 +1713,68 @@ function toggleLang(){
 function preparePrintReport(){
   const eventName = CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra';
   const subtitle = meta.eventSubtitle || CONFIG.eventSubtitleOverride || 'Wyniki zawodów';
-  const updated = formatDateTime(meta.lastUpdate) || new Date().toLocaleString('pl-PL');
+  const updated = formatDateTime(meta.lastUpdate) || new Date().toLocaleString(uiLang === 'en' ? 'en-GB' : 'pl-PL');
   const activeLoop = meta.activeLoop || (rows.length ? Math.max(...rows.map(r => r._loops || 0)) : '–');
   const titleEl = document.getElementById('print-title');
   const subEl = document.getElementById('print-subtitle');
   const updEl = document.getElementById('print-update');
   if(titleEl) titleEl.textContent = eventName;
-  if(subEl) subEl.textContent = `${subtitle} · Pętla: ${activeLoop}`;
-  if(updEl) updEl.textContent = `Aktualizacja: ${updated}`;
+  if(subEl) subEl.textContent = subtitle;
+  if(updEl) updEl.textContent = `${t('updated')} ${updated}`;
+  buildPrintSummary(activeLoop);
+  buildPrintTable();
+}
+
+function buildPrintSummary(activeLoop){
+  const el = document.getElementById('print-summary');
+  if(!el) return;
+  const total = rows.filter(r => r._status !== 'DNS').length;
+  const active = rows.filter(r => r._status === 'RUN').length;
+  const out = rows.filter(r => !['RUN','DNS'].includes(r._status)).length;
+  const best = rows.reduce((a,r) => { const sec = durationToSec(r[COL.bestLap]); return sec && (!a || sec < a.sec) ? {sec,r} : a; }, null);
+  const bestText = best ? `${formatDurationFromSeconds(best.sec)} · ${best.r[COL.name] || ''}` : '–';
+  const cards = [
+    [t('loopNo'), activeLoop || '–'],
+    [t('starters'), total],
+    [t('active'), active],
+    [t('dropped'), out],
+    [t('record'), bestText]
+  ];
+  el.innerHTML = cards.map(([k,v]) => `<div class="ps-card"><span class="ps-k">${esc(k)}</span><span class="ps-v">${esc(v)}</span></div>`).join('');
+}
+
+function buildPrintTable(){
+  const el = document.getElementById('print-table');
+  if(!el) return;
+  const data = [...rows].sort(defaultLiveCompare);
+  const headers = [t('place'), t('bib'), t('runner'), t('country'), t('status'), t('loops'), t('distance'), t('lastLap'), t('bestLap'), t('toPb')];
+  const head = `<thead><tr>
+    <th class="p-pos">${esc(headers[0])}</th><th class="p-bib">${esc(headers[1])}</th><th class="p-name">${esc(headers[2])}</th><th class="p-country">${esc(headers[3])}</th><th class="p-status">${esc(headers[4])}</th><th class="p-loops">${esc(headers[5])}</th><th class="p-distance">${esc(headers[6])}</th><th class="p-time">${esc(headers[7])}</th><th class="p-time">${esc(headers[8])}</th><th class="p-topb">${esc(headers[9])}</th>
+  </tr></thead>`;
+  const body = data.map(r => {
+    const sub = [r[COL.city], r[COL.team]].filter(Boolean).join(' · ');
+    const status = String(r._status || r[COL.status] || '').toUpperCase();
+    return `<tr>
+      <td class="p-pos">${esc(r._place || '–')}</td>
+      <td class="p-bib">${esc(r[COL.bib] || '–')}</td>
+      <td class="p-name"><span class="p-name-main">${esc(r[COL.name] || '–')}</span>${sub ? `<span class="p-name-sub">${esc(sub)}</span>` : ''}</td>
+      <td class="p-country">${esc((r[COL.country] || '').toString().toUpperCase())}</td>
+      <td class="p-status"><span class="p-status-badge p-status-${esc(status.toLowerCase())}">${esc(status || '–')}</span></td>
+      <td class="p-loops">${esc(r._loops || 0)}</td>
+      <td class="p-distance">${esc(formatKm(r._distance))} km</td>
+      <td class="p-time">${esc(formatDuration(r[COL.lastLap]) || '–')}</td>
+      <td class="p-time">${esc(formatDuration(r[COL.bestLap]) || '–')}</td>
+      <td class="p-topb">${esc(formatToPb(r[COL.toPb]))}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `<table>${head}<tbody>${body}</tbody></table>`;
+}
+
+function durationToSec(v){
+  const txt = formatDuration(v);
+  const m = String(txt || '').match(/^(\d+):(\d{2}):(\d{2})$/);
+  if(!m) return 0;
+  return Number(m[1])*3600 + Number(m[2])*60 + Number(m[3]);
 }
 function downloadPDF(){
   const oldTitle = document.title;
