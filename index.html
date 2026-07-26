@@ -505,16 +505,21 @@ body.sponsors-hidden .spstrip { display:none; }
 }
 .spwrap { flex:1; overflow:hidden; }
 .sptrack {
-  display:flex; align-items:center; gap:3rem;
-  animation:spscroll 24s linear infinite; width:max-content;
+  display:flex; align-items:center; gap:1.35rem;
+  animation:spscroll 28s linear infinite; width:max-content;
 }
 .sptrack:hover{animation-play-state:paused}
 @keyframes spscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .spimg {
-  height:clamp(26px,3.5vw,44px); width:auto; object-fit:contain;
-  filter:brightness(.7) grayscale(.1); transition:filter .3s; flex-shrink:0;
+  height:clamp(46px,5vw,70px); width:clamp(92px,10vw,140px);
+  object-fit:contain; object-position:center;
+  padding:.28rem .55rem;
+  background:rgba(230,230,230,.78);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:3px;
+  filter:brightness(.85) grayscale(.05); transition:filter .3s, transform .2s; flex-shrink:0;
 }
-.spimg:hover{filter:brightness(1.3) grayscale(0)}
+.spimg:hover{filter:brightness(1.12) grayscale(0); transform:translateY(-1px)}
 .spclose {
   flex-shrink:0; margin:0 .7rem 0 .5rem;
   background:#1a1a1a; border:1px solid var(--border2); color:var(--muted);
@@ -1085,7 +1090,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 
 <script>
 /* =========================================================
-   OLECKO LIVE SCOREBOARD v7.36 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
+   OLECKO LIVE SCOREBOARD v7.38 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
    Do podmiany przed publikacją:
    1) CONFIG.csvUrl — link CSV opublikowanej zakładki WYNIKI_HTML
    2) metaCsvUrl opcjonalnie — domyślnie próbuje czytać META_HTML po nazwie arkusza
@@ -1206,10 +1211,7 @@ async function fetchData(){
   }
   try {
     const baseCsvUrl = normalizePublishedCsvUrl(CONFIG.csvUrl);
-    const url = baseCsvUrl + (baseCsvUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
-    const res = await fetch(url, {cache: 'no-store'});
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const txt = await res.text();
+    const txt = await fetchCsvText_(baseCsvUrl);
     const hash = simpleHash(txt);
     const parsed = parseCSV(txt);
     const freshRows = parsed.rows.filter(r => String(r[COL.name] || '').trim());
@@ -1234,6 +1236,7 @@ async function fetchData(){
 
     rows = freshRows;
     meta = freshMeta;
+    try { localStorage.setItem('bu_last_good_csv', txt); } catch(e) {}
     applyMeta(meta); normalizeRows(); buildStats(); buildTimeline(); render(); setStickyTop();
     if (prevHash !== null && hash !== prevHash) toast(uiLang === 'pl' ? '✓ Uaktualniono' : '✓ Updated');
     prevHash = hash;
@@ -1256,10 +1259,27 @@ async function fetchData(){
       toast(uiLang === 'pl' ? '⚠️ Chwilowy problem z odświeżeniem' : '⚠️ Temporary refresh problem');
       return;
     }
+    const restored = restoreLastGoodCsv_();
+    if (restored) return;
     showTableMessage('⚠️ Błąd przetwarzania/pobierania danych.<br><small>' + esc(e.message || e) + '</small>');
   } finally {
     fetchInProgress = false;
   }
+}
+
+function restoreLastGoodCsv_(){
+  try {
+    const txt = localStorage.getItem('bu_last_good_csv');
+    if(!txt) return false;
+    const parsed = parseCSV(txt);
+    const cachedRows = parsed.rows.filter(r => String(r[COL.name] || '').trim());
+    if(!cachedRows.length) return false;
+    rows = cachedRows;
+    meta = mergeMeta_(readMeta(rows), {});
+    applyMeta(meta); normalizeRows(); buildStats(); buildTimeline(); render(); setStickyTop();
+    toast(uiLang === 'pl' ? 'Pokazuję ostatnie poprawne dane' : 'Showing last valid data', 3000);
+    return true;
+  } catch(e) { return false; }
 }
 
 function normalizePublishedCsvUrl(url){
@@ -1267,6 +1287,35 @@ function normalizePublishedCsvUrl(url){
   if(!raw) return raw;
   if(raw.includes('/pubhtml')) return raw.replace('/pubhtml', '/pub?output=csv');
   return raw;
+}
+
+function withCacheBuster_(url){
+  return url + (url.includes('?') ? '&' : '?') + 'cb=' + Date.now();
+}
+function fetchWithTimeout_(url, options, timeoutMs){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs || 12000);
+  return fetch(url, {...(options || {}), signal: controller.signal}).finally(() => clearTimeout(timer));
+}
+async function fetchTextWithFallback_(baseUrl, timeoutMs){
+  const candidates = [...new Set([withCacheBuster_(baseUrl), baseUrl])];
+  let lastErr = null;
+  for (const url of candidates) {
+    try {
+      const res = await fetchWithTimeout_(url, {cache:'reload'}, timeoutMs || 12000);
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const txt = await res.text();
+      if(txt && txt.trim()) return txt;
+      throw new Error('Empty response');
+    } catch(err) {
+      lastErr = err;
+      console.warn('CSV fetch candidate failed', url, err);
+    }
+  }
+  throw lastErr || new Error('Nie udało się pobrać danych CSV');
+}
+async function fetchCsvText_(baseCsvUrl){
+  return fetchTextWithFallback_(baseCsvUrl, 12000);
 }
 
 
@@ -1283,10 +1332,7 @@ async function fetchMetaSheet(baseCsvUrl){
 
   for (const candidate of [...new Set(candidates)]) {
     try {
-      const finalUrl = candidate + (candidate.includes('?') ? '&' : '?') + 't=' + Date.now();
-      const res = await fetch(finalUrl, {cache:'no-store'});
-      if(!res.ok) continue;
-      const txt = await res.text();
+      const txt = await fetchTextWithFallback_(candidate, 5000);
       const parsed = parseCSV(txt);
       const out = parseMetaRows_(parsed);
       if(Object.keys(out).length) return out;
@@ -1326,9 +1372,7 @@ function buildPublishedHtmlUrl_(baseCsvUrl){
 async function findPublishedSheetCsvByName_(baseCsvUrl, sheetName){
   const htmlUrl = buildPublishedHtmlUrl_(baseCsvUrl);
   if(!htmlUrl) return '';
-  const res = await fetch(htmlUrl + '?t=' + Date.now(), {cache:'no-store'});
-  if(!res.ok) return '';
-  const html = await res.text();
+  const html = await fetchTextWithFallback_(htmlUrl, 5000);
   const escaped = String(sheetName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp('gid=([0-9]+)[^>]{0,500}>' + escaped + '<', 'i');
   const m = html.match(re) || html.match(new RegExp(escaped + '[\\s\\S]{0,800}?gid=([0-9]+)', 'i')) || html.match(new RegExp('gid=([0-9]+)[\\s\\S]{0,800}?' + escaped, 'i'));
@@ -2328,4 +2372,25 @@ function normalizeCountryCode(v){
   };
   if(names[c]) return names[c];
   const iso3 = {
-    AFG:'AF', ALA:'AX', ALB:'AL', DZA:'DZ', ASM:'AS
+    AFG:'AF', ALA:'AX', ALB:'AL', DZA:'DZ', ASM:'AS', AND:'AD', AGO:'AO', AIA:'AI', ATA:'AQ', ATG:'AG', ARG:'AR', ARM:'AM', ABW:'AW', AUS:'AU', AUT:'AT', AZE:'AZ',
+    BHS:'BS', BHR:'BH', BGD:'BD', BRB:'BB', BLR:'BY', BEL:'BE', BLZ:'BZ', BEN:'BJ', BMU:'BM', BTN:'BT', BOL:'BO', BES:'BQ', BIH:'BA', BWA:'BW', BVT:'BV', BRA:'BR', IOT:'IO', BRN:'BN', BGR:'BG', BFA:'BF', BDI:'BI',
+    CPV:'CV', KHM:'KH', CMR:'CM', CAN:'CA', CYM:'KY', CAF:'CF', TCD:'TD', CHL:'CL', CHN:'CN', CXR:'CX', CCK:'CC', COL:'CO', COM:'KM', COG:'CG', COD:'CD', COK:'CK', CRI:'CR', CIV:'CI', HRV:'HR', CUB:'CU', CUW:'CW', CYP:'CY', CZE:'CZ',
+    DNK:'DK', DJI:'DJ', DMA:'DM', DOM:'DO', ECU:'EC', EGY:'EG', SLV:'SV', GNQ:'GQ', ERI:'ER', EST:'EE', SWZ:'SZ', ETH:'ET', FLK:'FK', FRO:'FO', FJI:'FJ', FIN:'FI', FRA:'FR', GUF:'GF', PYF:'PF', ATF:'TF',
+    GAB:'GA', GMB:'GM', GEO:'GE', DEU:'DE', GHA:'GH', GIB:'GI', GRC:'GR', GRL:'GL', GRD:'GD', GLP:'GP', GUM:'GU', GTM:'GT', GGY:'GG', GIN:'GN', GNB:'GW', GUY:'GY', HTI:'HT', HMD:'HM', VAT:'VA', HND:'HN', HKG:'HK', HUN:'HU',
+    ISL:'IS', IND:'IN', IDN:'ID', IRN:'IR', IRQ:'IQ', IRL:'IE', IMN:'IM', ISR:'IL', ITA:'IT', JAM:'JM', JPN:'JP', JEY:'JE', JOR:'JO', KAZ:'KZ', KEN:'KE', KIR:'KI', PRK:'KP', KOR:'KR', KWT:'KW', KGZ:'KG', LAO:'LA', LVA:'LV', LBN:'LB', LSO:'LS', LBR:'LR', LBY:'LY', LIE:'LI', LTU:'LT', LUX:'LU', MAC:'MO', MDG:'MG', MWI:'MW', MYS:'MY', MDV:'MV', MLI:'ML', MLT:'MT', MHL:'MH', MTQ:'MQ', MRT:'MR', MUS:'MU', MYT:'YT', MEX:'MX', FSM:'FM', MDA:'MD', MCO:'MC', MNG:'MN', MNE:'ME', MSR:'MS', MAR:'MA', MOZ:'MZ', MMR:'MM', NAM:'NA', NRU:'NR', NPL:'NP', NLD:'NL', NCL:'NC', NZL:'NZ', NIC:'NI', NER:'NE', NGA:'NG', NIU:'NU', NFK:'NF', MKD:'MK', MNP:'MP', NOR:'NO', OMN:'OM', PAK:'PK', PLW:'PW', PSE:'PS', PAN:'PA', PNG:'PG', PRY:'PY', PER:'PE', PHL:'PH', PCN:'PN', POL:'PL', PRT:'PT', PRI:'PR', QAT:'QA', REU:'RE', ROU:'RO', RUS:'RU', RWA:'RW', BLM:'BL', SHN:'SH', KNA:'KN', LCA:'LC', MAF:'MF', SPM:'PM', VCT:'VC', WSM:'WS', SMR:'SM', STP:'ST', SAU:'SA', SEN:'SN', SRB:'RS', SYC:'SC', SLE:'SL', SGP:'SG', SXM:'SX', SVK:'SK', SVN:'SI', SLB:'SB', SOM:'SO', ZAF:'ZA', SGS:'GS', SSD:'SS', ESP:'ES', LKA:'LK', SDN:'SD', SUR:'SR', SJM:'SJ', SWE:'SE', CHE:'CH', SYR:'SY', TWN:'TW', TJK:'TJ', TZA:'TZ', THA:'TH', TLS:'TL', TGO:'TG', TKL:'TK', TON:'TO', TTO:'TT', TUN:'TN', TUR:'TR', TKM:'TM', TCA:'TC', TUV:'TV', UGA:'UG', UKR:'UA', ARE:'AE', GBR:'GB', USA:'US', UMI:'UM', URY:'UY', UZB:'UZ', VUT:'VU', VEN:'VE', VNM:'VN', VGB:'VG', VIR:'VI', WLF:'WF', ESH:'EH', YEM:'YE', ZMB:'ZM', ZWE:'ZW'
+  };
+  if(iso3[c]) return iso3[c];
+  if(/^[A-Z]{2}$/.test(c)) return c;
+  return '';
+}
+function iso2ToFlag(code){
+  if(!/^[A-Z]{2}$/.test(code)) return '';
+  return String.fromCodePoint(...[...code].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65));
+}
+function simpleHash(s){ let h=0; for(let i=0;i<s.length;i++) h=(Math.imul(31,h)+s.charCodeAt(i))|0; return h; }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+function unesc(s){ const el=document.createElement('textarea'); el.innerHTML=s; return el.value; }
+</script>
+
+</body>
+</html>
