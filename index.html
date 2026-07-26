@@ -955,6 +955,58 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   html{font-size:18px}
   .cl{font-size:2.2rem}
 }
+
+
+/* Runtime PDF report printed from the current page. */
+.runtime-print-report{display:none;}
+@media print{
+  body.pdf-print-mode > *:not(.runtime-print-report){display:none !important;}
+  body.pdf-print-mode > .runtime-print-report,
+  body.pdf-print-mode > .runtime-print-report *{visibility:visible !important;}
+  body.pdf-print-mode > .runtime-print-report{display:block !important; position:static !important; inset:auto !important; background:#fff !important; color:#111 !important; width:100% !important; margin:0 !important; padding:0 !important;}
+  body.pdf-print-mode{background:#fff !important; color:#111 !important;}
+  body.pdf-print-mode .runtime-print-report .sheet{width:100% !important; max-width:none !important; min-height:0 !important; margin:0 !important; padding:0 !important; box-shadow:none !important; background:#fff !important; color:#111 !important; font-family:Arial,Helvetica,sans-serif !important;}
+  body.pdf-print-mode .runtime-print-report .top{display:grid !important; grid-template-columns:20mm 1fr 62mm !important; gap:5mm !important; align-items:center !important; border-bottom:3px solid #111 !important; padding-bottom:4mm !important; margin-bottom:4mm !important;}
+  body.pdf-print-mode .runtime-print-report .logo{width:19mm !important; height:19mm !important; border-radius:50% !important; object-fit:cover !important;}
+  body.pdf-print-mode .runtime-print-report .kicker{font-size:8pt !important; color:#d45a00 !important; font-weight:900 !important; letter-spacing:.14em !important; text-transform:uppercase !important; margin-bottom:1mm !important;}
+  body.pdf-print-mode .runtime-print-report h1{margin:0 !important; font-size:22pt !important; line-height:1.03 !important; text-transform:uppercase !important; letter-spacing:.015em !important; color:#111 !important; font-family:Arial,Helvetica,sans-serif !important;}
+  body.pdf-print-mode .runtime-print-report .subtitle{font-size:9pt !important; font-weight:700 !important; color:#555 !important; margin-top:1.5mm !important;}
+  body.pdf-print-mode .runtime-print-report .side{border-left:1px solid #ccc !important; padding-left:4mm !important; font-size:8pt !important;}
+  body.pdf-print-mode .runtime-print-report .side div{display:flex !important; justify-content:space-between !important; gap:5mm !important; padding:.7mm 0 !important;}
+  body.pdf-print-mode .runtime-print-report .side span{color:#777 !important; text-transform:uppercase !important; font-weight:800 !important; letter-spacing:.06em !important;}
+  body.pdf-print-mode .runtime-print-report .side strong{text-align:right !important; color:#111 !important;}
+  body.pdf-print-mode .runtime-print-report .summary{display:grid !important; grid-template-columns:repeat(6,1fr) !important; border:1.5px solid #111 !important; border-left:0 !important; margin:4mm 0 3.5mm !important;}
+  body.pdf-print-mode .runtime-print-report .summary div{border-left:1.5px solid #111 !important; padding:2mm 2.2mm !important; min-height:12mm !important;}
+  body.pdf-print-mode .runtime-print-report .summary span{display:block !important; color:#666 !important; font-size:6.5pt !important; text-transform:uppercase !important; font-weight:900 !important; letter-spacing:.08em !important; margin-bottom:1mm !important;}
+  body.pdf-print-mode .runtime-print-report .summary strong{font-size:12.5pt !important; font-weight:900 !important; white-space:nowrap !important; color:#111 !important;}
+  body.pdf-print-mode .runtime-print-report .result-title{font-size:9pt !important; font-weight:900 !important; text-transform:uppercase !important; letter-spacing:.08em !important; margin:0 0 1.5mm !important; color:#111 !important; font-family:Arial,Helvetica,sans-serif !important;}
+  body.pdf-print-mode .runtime-print-report .result-title:after{content:'' !important; display:block !important; height:1px !important; background:#111 !important; margin-top:1mm !important;}
+  body.pdf-print-mode .runtime-print-report table{width:100% !important; border-collapse:collapse !important; table-layout:fixed !important; border:1.5px solid #111 !important;}
+  body.pdf-print-mode .runtime-print-report thead{display:table-header-group !important;}
+  body.pdf-print-mode .runtime-print-report th{background:#111 !important; color:#fff !important; font-size:6.7pt !important; padding:1.8mm 1.1mm !important; text-transform:uppercase !important; letter-spacing:.035em !important; text-align:left !important; border-right:.5px solid #555 !important; white-space:nowrap !important; font-family:Arial,Helvetica,sans-serif !important;}
+  body.pdf-print-mode .runtime-print-report td{font-size:7.5pt !important; padding:1.35mm 1.1mm !important; border-right:.5px solid #ddd !important; border-bottom:.5px solid #d8d8d8 !important; vertical-align:middle !important; overflow:hidden !important; text-overflow:ellipsis !important; color:#111 !important; font-family:Arial,Helvetica,sans-serif !important;}
+  body.pdf-print-mode .runtime-print-report tbody tr:nth-child(even) td{background:#f4f4f4 !important;}
+  body.pdf-print-mode .runtime-print-report .pos{width:5% !important; text-align:center !important; font-weight:900 !important;}
+  body.pdf-print-mode .runtime-print-report .bib{width:5% !important; text-align:center !important; font-weight:800 !important;}
+  body.pdf-print-mode .runtime-print-report .runner{width:24% !important;}
+  body.pdf-print-mode .runtime-print-report .runner strong{display:block !important; font-size:8.4pt !important; line-height:1.04 !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; color:#111 !important;}
+  body.pdf-print-mode .runtime-print-report .runner small{display:block !important; font-size:6.2pt !important; color:#555 !important; margin-top:.6mm !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important;}
+  body.pdf-print-mode .runtime-print-report .center{text-align:center !important;}
+  body.pdf-print-mode .runtime-print-report .loops{text-align:center !important; font-weight:900 !important; font-size:8.6pt !important;}
+  body.pdf-print-mode .runtime-print-report .num{text-align:right !important; font-weight:800 !important;}
+  body.pdf-print-mode .runtime-print-report .time{text-align:center !important; font-family:'Courier New',monospace !important; font-size:7.3pt !important;}
+  body.pdf-print-mode .runtime-print-report .badge{display:inline-block !important; min-width:12mm !important; border:1px solid #777 !important; border-radius:2mm !important; padding:.6mm 1.1mm !important; font-size:6.2pt !important; font-weight:900 !important; letter-spacing:.03em !important;}
+  body.pdf-print-mode .runtime-print-report .run{color:#087a37 !important; border-color:#087a37 !important; background:#eef9f2 !important;}
+  body.pdf-print-mode .runtime-print-report .win{color:#8a6500 !important; border-color:#b98700 !important; background:#fff8dc !important;}
+  body.pdf-print-mode .runtime-print-report .rtc{color:#0b5e92 !important; border-color:#0b5e92 !important; background:#eaf5ff !important;}
+  body.pdf-print-mode .runtime-print-report .dnc{color:#666 !important; border-color:#888 !important; background:#f0f0f0 !important;}
+  body.pdf-print-mode .runtime-print-report .over{color:#8d3c00 !important; border-color:#bb5200 !important; background:#fff0e5 !important;}
+  body.pdf-print-mode .runtime-print-report .dns{color:#555 !important; border-color:#888 !important; background:#eee !important;}
+  body.pdf-print-mode .runtime-print-report .dsq{color:#c00000 !important; border-color:#c00000 !important; background:#ffecec !important;}
+  body.pdf-print-mode .runtime-print-report .foot{display:flex !important; justify-content:space-between !important; gap:8mm !important; border-top:1px solid #ccc !important; margin-top:3mm !important; padding-top:2mm !important; font-size:6.6pt !important; color:#666 !important;}
+  body.pdf-print-mode .runtime-print-report .foot strong{color:#111 !important;}
+}
+
 </style>
 </head>
 <body>
@@ -2149,14 +2201,73 @@ function downloadPDF(){
     toast(uiLang === 'pl' ? 'Brak danych do PDF' : 'No data for PDF');
     return;
   }
+
+  let cleanupTimer = null;
+  const cleanup = () => {
+    document.body.classList.remove('pdf-print-mode');
+    if(cleanupTimer) clearTimeout(cleanupTimer);
+  };
+
   try {
-    preparePrintReport();
+    let host = document.getElementById('runtime-print-report');
+    if(!host){
+      host = document.createElement('section');
+      host.id = 'runtime-print-report';
+      host.className = 'runtime-print-report';
+      document.body.appendChild(host);
+    }
+
+    let reportBody = '';
+    try {
+      const full = buildStandalonePrintReport();
+      const parsed = new DOMParser().parseFromString(full, 'text/html');
+      const sheet = parsed.querySelector('.sheet');
+      reportBody = sheet ? sheet.outerHTML : '';
+    } catch(reportErr){
+      console.warn('Standalone report failed, using fallback report.', reportErr);
+      reportBody = buildFallbackPrintReport_();
+    }
+
+    host.innerHTML = reportBody || buildFallbackPrintReport_();
+    document.body.classList.add('pdf-print-mode');
     toast(uiLang === 'pl' ? 'Otwieram zapis PDF…' : 'Opening PDF save…');
-    window.print();
+
+    window.addEventListener('afterprint', cleanup, { once:true });
+    cleanupTimer = setTimeout(cleanup, 7000);
+
+    setTimeout(() => {
+      try { window.print(); }
+      catch(printErr){ console.error(printErr); cleanup(); toast(uiLang === 'pl' ? 'Nie udało się otworzyć drukowania' : 'Could not open print dialog'); }
+    }, 80);
   } catch(e){
     console.error(e);
+    cleanup();
     toast(uiLang === 'pl' ? 'Nie udało się przygotować PDF' : 'Could not prepare PDF');
   }
+}
+
+function buildFallbackPrintReport_(){
+  const eventName = esc(CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra');
+  const subtitle = esc(meta.eventSubtitle || CONFIG.eventSubtitleOverride || 'Wyniki zawodów');
+  const data = [...rows].sort(defaultLiveCompare);
+  const cols = uiLang === 'en'
+    ? ['Pos.','Bib','Runner','Status','Loops','Distance','Last lap','Best lap']
+    : ['Msc.','Nr','Zawodnik','Status','Pętle','Dystans','Ostatnia','Najlepsza'];
+  const body = data.map(r => {
+    const status = String(r._status || r[COL.status] || '').toUpperCase();
+    const sub = [r[COL.city], r[COL.team]].filter(Boolean).join(' · ');
+    return `<tr>
+      <td class="pos">${esc(r._place || '–')}</td>
+      <td class="bib">${esc(r[COL.bib] || '–')}</td>
+      <td class="runner"><strong>${esc(r[COL.name] || '–')}</strong>${sub ? `<small>${esc(sub)}</small>` : ''}</td>
+      <td class="center"><span class="badge ${esc(status.toLowerCase())}">${esc(status || '–')}</span></td>
+      <td class="loops">${esc(r._loops || 0)}</td>
+      <td class="num">${esc(formatKm(r._distance))} km</td>
+      <td class="time">${esc(formatDuration(r[COL.lastLap]) || '–')}</td>
+      <td class="time">${esc(formatDuration(r[COL.bestLap]) || '–')}</td>
+    </tr>`;
+  }).join('');
+  return `<main class="sheet"><header class="top"><img class="logo" src="${esc(CONFIG.logoUrl || '')}"><div><div class="kicker">${uiLang === 'en' ? 'Race results' : 'Wyniki zawodów'}</div><h1>${eventName}</h1><div class="subtitle">${subtitle}</div></div><div class="side"><div><span>${uiLang === 'en' ? 'Updated' : 'Aktualizacja'}</span><strong>${esc(formatDateTime(meta.lastUpdate) || '')}</strong></div><div><span>${uiLang === 'en' ? 'Loop' : 'Pętla'}</span><strong>${esc(getDisplayLoop_() || '–')}</strong></div></div></header><h2 class="result-title">${uiLang === 'en' ? 'Race classification' : 'Klasyfikacja zawodów'}</h2><table><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table><footer class="foot"><span>${uiLang === 'en' ? 'Generated from live data.' : 'Wygenerowano z danych live.'}</span></footer></main>`;
 }
 function setStickyTop(){
   const top = document.querySelector('.live-top');
