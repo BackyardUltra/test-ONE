@@ -2145,42 +2145,17 @@ function buildStandalonePrintReport(){
   </style></head><body><main class="sheet"><header class="top"><img class="logo" src="${esc(CONFIG.logoUrl || '')}"><div><div class="kicker">${esc(reportTitle)}</div><h1>${esc(eventName)}</h1><div class="subtitle">${esc(subtitle)}</div></div><div class="side"><div><span>${uiLang === 'en' ? 'Updated' : 'Aktualizacja'}</span><strong>${esc(updated)}</strong></div><div><span>${uiLang === 'en' ? 'Loop' : 'Pętla'}</span><strong>${esc(activeLoop || '–')}</strong></div><div><span>${uiLang === 'en' ? 'Lap distance' : 'Dystans pętli'}</span><strong>${esc(formatKm(meta.lapDistance || meta.lapDistanceKm || CONFIG.kmPerLoopFallback))} km</strong></div></div></header><section class="summary">${summaryHtml}</section><h2 class="result-title">${esc(reportTitle)}</h2><table><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rowsHtml}</tbody></table><footer class="foot"><span><strong>Status:</strong> ${uiLang === 'en' ? 'RUN = active, RTC/DNC/OVER/DSQ = not active. Completed loops remain visible.' : 'RUN = zawodnik aktywny, RTC/DNC/OVER/DSQ = zawodnik nieaktywny. Ukończone pętle pozostają widoczne.'}</span><span>${esc(generated)}</span></footer></main></body></html>`;
 }
 function downloadPDF(){
-  if(!rows.length){ toast(uiLang === 'pl' ? 'Brak danych do PDF' : 'No data for PDF'); return; }
+  if(!rows.length){
+    toast(uiLang === 'pl' ? 'Brak danych do PDF' : 'No data for PDF');
+    return;
+  }
   try {
-    const report = buildStandalonePrintReport();
-    let frame = document.getElementById('pdf-print-frame');
-    if(!frame){
-      frame = document.createElement('iframe');
-      frame.id = 'pdf-print-frame';
-      frame.setAttribute('title', 'PDF print frame');
-      frame.style.position = 'fixed';
-      frame.style.right = '0';
-      frame.style.bottom = '0';
-      frame.style.width = '0';
-      frame.style.height = '0';
-      frame.style.border = '0';
-      frame.style.opacity = '0';
-      frame.style.pointerEvents = 'none';
-      document.body.appendChild(frame);
-    }
-    frame.onload = () => {
-      setTimeout(() => {
-        try {
-          frame.contentWindow.focus();
-          frame.contentWindow.print();
-        } catch(err) {
-          console.error(err);
-          preparePrintReport();
-          window.print();
-        }
-      }, 250);
-    };
-    frame.srcdoc = report;
-    toast(uiLang === 'pl' ? 'Przygotowuję PDF…' : 'Preparing PDF…');
+    preparePrintReport();
+    toast(uiLang === 'pl' ? 'Otwieram zapis PDF…' : 'Opening PDF save…');
+    window.print();
   } catch(e){
     console.error(e);
-    preparePrintReport();
-    window.print();
+    toast(uiLang === 'pl' ? 'Nie udało się przygotować PDF' : 'Could not prepare PDF');
   }
 }
 function setStickyTop(){
