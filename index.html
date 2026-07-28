@@ -100,7 +100,7 @@ body {
   font-family:'JetBrains Mono',monospace;
 }
 .hdr-btn:hover { border-color:var(--orange); color:var(--orange); }
-#btn-lang,#btn-pdf,#btn-timeline,#btn-legend { font-size:.72rem; letter-spacing:.08em; padding:.36rem .62rem; min-width:3.9rem; justify-content:center; }
+#btn-lang,#btn-timeline,#btn-legend { font-size:.72rem; letter-spacing:.08em; padding:.36rem .62rem; min-width:3.9rem; justify-content:center; }
 #btn-timeline { min-width:6.2rem; }
 #btn-legend { min-width:5.2rem; }
 #btn-fs { width:2.35rem; height:2.35rem; justify-content:center; font-size:1rem; }
@@ -439,7 +439,6 @@ tbody tr.rf td:first-child { border-left: 3px solid #d9607a; }
 .lap-worst .lap-t { color:var(--red); }
 
 
-
 /* ── STATUS LEGEND ── */
 .legend-modal { max-width:780px; }
 .legend-intro { color:var(--text2); font-size:.96rem; line-height:1.38; margin-bottom:.85rem; }
@@ -542,245 +541,6 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 }
 #toast.show{opacity:1}
 
-.print-report { display:none; }
-
-/* ── PRINT / PDF — professional race result sheet ── */
-@media print {
-  @page { size: A4 landscape; margin: 8mm 8mm 9mm; }
-
-  * { box-shadow:none !important; text-shadow:none !important; animation:none !important; transition:none !important; }
-  html, body { background:#fff !important; color:#111 !important; padding:0 !important; margin:0 !important; overflow:visible !important; font-family: Arial, Helvetica, sans-serif !important; }
-
-  body > *:not(.print-report) { display:none !important; }
-  .print-report,
-  .print-report * { visibility:visible !important; }
-
-  .print-report {
-    display:block !important;
-    width:100% !important;
-    margin:0 !important;
-    padding:0 !important;
-    color:#111 !important;
-    background:#fff !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-  }
-
-  .print-sheet { width:100% !important; }
-
-  .print-main-head {
-    display:grid !important;
-    grid-template-columns: 18mm 1fr 54mm !important;
-    gap:5mm !important;
-    align-items:center !important;
-    padding-bottom:4mm !important;
-    border-bottom:2.4pt solid #111 !important;
-  }
-
-  .print-logo {
-    width:17mm !important;
-    height:17mm !important;
-    object-fit:cover !important;
-    border-radius:50% !important;
-    display:block !important;
-  }
-
-  .print-kicker {
-    font-size:7.2pt !important;
-    font-weight:800 !important;
-    letter-spacing:.16em !important;
-    text-transform:uppercase !important;
-    color:#e06600 !important;
-    margin:0 0 1.3mm 0 !important;
-  }
-
-  .print-report h1 {
-    margin:0 !important;
-    padding:0 !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-size:20.5pt !important;
-    line-height:1.02 !important;
-    font-weight:900 !important;
-    text-transform:uppercase !important;
-    letter-spacing:.02em !important;
-    color:#111 !important;
-  }
-
-  .print-subline {
-    margin-top:1.4mm !important;
-    font-size:8.7pt !important;
-    font-weight:600 !important;
-    color:#444 !important;
-  }
-
-  .print-side {
-    align-self:stretch !important;
-    border-left:1.5pt solid #ddd !important;
-    padding-left:4mm !important;
-    display:flex !important;
-    flex-direction:column !important;
-    justify-content:center !important;
-    gap:1.3mm !important;
-    text-align:left !important;
-  }
-
-  .print-side .side-row {
-    display:flex !important;
-    justify-content:space-between !important;
-    gap:5mm !important;
-    font-size:7.6pt !important;
-    line-height:1.1 !important;
-    color:#333 !important;
-  }
-  .print-side .side-k { text-transform:uppercase !important; letter-spacing:.07em !important; color:#777 !important; font-weight:700 !important; }
-  .print-side .side-v { color:#111 !important; font-weight:800 !important; text-align:right !important; }
-
-  .print-summary {
-    display:grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap:0 !important;
-    margin:3.2mm 0 3.6mm !important;
-    border:1pt solid #111 !important;
-    border-left:0 !important;
-  }
-  .print-summary .ps-card {
-    background:#fff !important;
-    border-left:1pt solid #111 !important;
-    padding:1.8mm 2.3mm !important;
-    min-height:11mm !important;
-  }
-  .print-summary .ps-k {
-    display:block !important;
-    font-size:6.7pt !important;
-    color:#666 !important;
-    text-transform:uppercase !important;
-    letter-spacing:.08em !important;
-    margin-bottom:1mm !important;
-    font-weight:800 !important;
-  }
-  .print-summary .ps-v {
-    display:block !important;
-    font-size:12pt !important;
-    line-height:1.04 !important;
-    font-weight:900 !important;
-    color:#111 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-
-  .print-table { display:block !important; width:100% !important; }
-  .print-table table {
-    width:100% !important;
-    border-collapse:collapse !important;
-    table-layout:fixed !important;
-    border:1pt solid #111 !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-  }
-
-  .print-table thead { display:table-header-group !important; }
-  .print-table tr { break-inside:avoid !important; page-break-inside:avoid !important; }
-
-  .print-table th {
-    background:#111 !important;
-    color:#fff !important;
-    font-size:6.8pt !important;
-    line-height:1.05 !important;
-    font-weight:900 !important;
-    letter-spacing:.04em !important;
-    text-transform:uppercase !important;
-    padding:2mm 1.35mm !important;
-    border-right:.5pt solid #555 !important;
-    text-align:left !important;
-    white-space:nowrap !important;
-  }
-  .print-table th:last-child { border-right:0 !important; }
-
-  .print-table td {
-    font-size:7.4pt !important;
-    line-height:1.12 !important;
-    padding:1.55mm 1.35mm !important;
-    border-right:.5pt solid #ddd !important;
-    border-bottom:.5pt solid #d8d8d8 !important;
-    vertical-align:middle !important;
-    color:#111 !important;
-    background:#fff !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-  .print-table tr:nth-child(even) td { background:#f6f6f6 !important; }
-  .print-table td:last-child { border-right:0 !important; }
-
-  .print-table .p-pos { width:5.2% !important; text-align:center !important; font-weight:900 !important; }
-  .print-table .p-bib { width:5.4% !important; text-align:center !important; font-weight:800 !important; }
-  .print-table .p-name { width:24% !important; }
-  .print-table .p-gender { width:4.6% !important; text-align:center !important; }
-  .print-table .p-country { width:5.7% !important; text-align:center !important; }
-  .print-table .p-status { width:7.1% !important; text-align:center !important; }
-  .print-table .p-loops { width:5.6% !important; text-align:center !important; font-weight:900 !important; }
-  .print-table .p-distance { width:8.1% !important; text-align:right !important; font-weight:800 !important; }
-  .print-table .p-time { width:8.2% !important; text-align:center !important; font-family:'Courier New', monospace !important; }
-  .print-table .p-total { width:8.6% !important; text-align:center !important; font-family:'Courier New', monospace !important; }
-  .print-table .p-pb { width:5.3% !important; text-align:center !important; }
-
-  .print-table .p-name-main {
-    display:block !important;
-    font-size:8.1pt !important;
-    font-weight:900 !important;
-    line-height:1.04 !important;
-    color:#111 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-  .print-table .p-name-sub {
-    display:block !important;
-    font-size:6.2pt !important;
-    color:#555 !important;
-    margin-top:.8mm !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-
-  .print-table .p-status-badge {
-    display:inline-block !important;
-    min-width:12.5mm !important;
-    text-align:center !important;
-    border-radius:2mm !important;
-    padding:.75mm 1.4mm !important;
-    font-weight:900 !important;
-    font-size:6.4pt !important;
-    border:1pt solid #999 !important;
-    background:#fff !important;
-    color:#111 !important;
-    letter-spacing:.03em !important;
-  }
-  .print-table .p-status-run { color:#087a37 !important; border-color:#087a37 !important; background:#eef9f2 !important; }
-  .print-table .p-status-win { color:#866300 !important; border-color:#b98700 !important; background:#fff8dc !important; }
-  .print-table .p-status-rtc { color:#0b5e92 !important; border-color:#0b5e92 !important; background:#eaf5ff !important; }
-  .print-table .p-status-dnc { color:#8a5a00 !important; border-color:#b67900 !important; background:#fff4df !important; }
-  .print-table .p-status-over { color:#8d3c00 !important; border-color:#bb5200 !important; background:#fff0e5 !important; }
-  .print-table .p-status-dns { color:#555 !important; border-color:#888 !important; background:#eee !important; }
-  .print-table .p-status-dsq { color:#c00000 !important; border-color:#c00000 !important; background:#ffecec !important; }
-
-  .print-footnote {
-    margin-top:3mm !important;
-    padding-top:2mm !important;
-    border-top:1pt solid #ccc !important;
-    display:flex !important;
-    justify-content:space-between !important;
-    gap:8mm !important;
-    font-size:6.5pt !important;
-    color:#666 !important;
-  }
-  .print-footnote strong { color:#111 !important; }
-
-  .twrap,.tmsg,.spin { display:none !important; }
-}
-
-
-
-
 @media(max-width:760px){
   html { font-size:13px; }
   body { overflow-x:hidden; padding-bottom:58px; }
@@ -824,7 +584,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   #clock { font-size:.88rem; min-width:5.9rem; text-align:center; }
   #clock small { font-size:.56em; }
   .hdr-btn { height:2.05rem; padding:.28rem .46rem; border-radius:7px; }
-  #btn-lang,#btn-pdf,#btn-timeline,#btn-legend { font-size:.58rem; min-width:2.7rem; padding:.25rem .42rem; letter-spacing:.04em; }
+  #btn-lang,#btn-timeline,#btn-legend { font-size:.58rem; min-width:2.7rem; padding:.25rem .42rem; letter-spacing:.04em; }
   #btn-timeline { min-width:4.8rem; }
   #btn-legend { min-width:4.2rem; }
   #btn-fs { width:2.05rem; height:2.05rem; font-size:.86rem; }
@@ -957,55 +717,6 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 }
 
 
-/* Runtime PDF report printed from the current page. */
-.runtime-print-report{display:none;}
-@media print{
-  @page{size:A4 landscape;margin:8mm 8mm 9mm;}
-  html,body{background:#fff !important;color:#111 !important;}
-  body.pdf-print-mode > *:not(.runtime-print-report){display:none !important;}
-  body.pdf-print-mode > .runtime-print-report{display:block !important;position:static !important;inset:auto !important;width:100% !important;margin:0 !important;padding:0 !important;background:#fff !important;color:#111 !important;}
-  body.pdf-print-mode > .runtime-print-report *{visibility:visible !important;box-sizing:border-box !important;}
-  body.pdf-print-mode .runtime-print-report .sheet{width:100% !important;max-width:none !important;margin:0 !important;padding:0 !important;background:#fff !important;color:#111 !important;font-family:Arial,Helvetica,sans-serif !important;}
-  body.pdf-print-mode .runtime-print-report .report-top{display:grid !important;grid-template-columns:22mm 1fr 58mm !important;gap:5mm !important;align-items:center !important;border-bottom:2.4px solid #111 !important;padding-bottom:3.2mm !important;margin-bottom:3.2mm !important;}
-  body.pdf-print-mode .runtime-print-report .report-logo{width:20mm !important;height:20mm !important;border-radius:50% !important;object-fit:cover !important;}
-  body.pdf-print-mode .runtime-print-report .report-kicker{font-size:7.5pt !important;line-height:1 !important;color:#d45a00 !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:.16em !important;margin:0 0 1.2mm !important;}
-  body.pdf-print-mode .runtime-print-report h1{margin:0 !important;color:#111 !important;font-size:21pt !important;line-height:1.04 !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:.01em !important;font-family:Arial,Helvetica,sans-serif !important;}
-  body.pdf-print-mode .runtime-print-report .report-subtitle{margin-top:1.3mm !important;color:#444 !important;font-size:8.8pt !important;font-weight:700 !important;}
-  body.pdf-print-mode .runtime-print-report .report-meta{border-left:1px solid #c9c9c9 !important;padding-left:4mm !important;font-size:7.2pt !important;}
-  body.pdf-print-mode .runtime-print-report .report-meta div{display:flex !important;justify-content:space-between !important;gap:4mm !important;padding:.7mm 0 !important;border-bottom:.4px solid #eee !important;}
-  body.pdf-print-mode .runtime-print-report .report-meta span{color:#666 !important;text-transform:uppercase !important;font-weight:900 !important;letter-spacing:.06em !important;}
-  body.pdf-print-mode .runtime-print-report .report-meta strong{color:#111 !important;text-align:right !important;font-weight:900 !important;}
-  body.pdf-print-mode .runtime-print-report .report-strip{display:grid !important;grid-template-columns:repeat(6,1fr) !important;border:1.4px solid #111 !important;border-left:0 !important;margin:3.2mm 0 3mm !important;}
-  body.pdf-print-mode .runtime-print-report .report-strip div{border-left:1.4px solid #111 !important;padding:1.7mm 2mm !important;min-height:10mm !important;}
-  body.pdf-print-mode .runtime-print-report .report-strip span{display:block !important;color:#666 !important;font-size:6.2pt !important;text-transform:uppercase !important;font-weight:900 !important;letter-spacing:.07em !important;margin-bottom:.8mm !important;}
-  body.pdf-print-mode .runtime-print-report .report-strip strong{display:block !important;color:#111 !important;font-size:11pt !important;line-height:1.05 !important;font-weight:900 !important;white-space:nowrap !important;}
-  body.pdf-print-mode .runtime-print-report .report-section-title{font-size:9pt !important;line-height:1 !important;margin:0 0 1.6mm !important;color:#111 !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:.1em !important;font-family:Arial,Helvetica,sans-serif !important;}
-  body.pdf-print-mode .runtime-print-report .report-table{width:100% !important;border-collapse:collapse !important;table-layout:fixed !important;border-top:2px solid #111 !important;border-bottom:2px solid #111 !important;}
-  body.pdf-print-mode .runtime-print-report .report-table thead{display:table-header-group !important;}
-  body.pdf-print-mode .runtime-print-report .report-table tr{break-inside:avoid !important;page-break-inside:avoid !important;}
-  body.pdf-print-mode .runtime-print-report .report-table th{background:#111 !important;color:#fff !important;font-size:6.8pt !important;line-height:1 !important;padding:1.45mm 1mm !important;text-align:left !important;text-transform:uppercase !important;letter-spacing:.045em !important;border-right:.5px solid #555 !important;font-weight:900 !important;font-family:Arial,Helvetica,sans-serif !important;white-space:nowrap !important;}
-  body.pdf-print-mode .runtime-print-report .report-table td{color:#111 !important;background:#fff !important;font-size:7.4pt !important;line-height:1.15 !important;padding:1.35mm 1mm !important;border-right:.45px solid #ddd !important;border-bottom:.45px solid #d6d6d6 !important;vertical-align:middle !important;font-family:Arial,Helvetica,sans-serif !important;}
-  body.pdf-print-mode .runtime-print-report .report-table tbody tr:nth-child(even) td{background:#f5f5f5 !important;}
-  body.pdf-print-mode .runtime-print-report .c-pos,body.pdf-print-mode .runtime-print-report .c-bib,body.pdf-print-mode .runtime-print-report .c-sex,body.pdf-print-mode .runtime-print-report .c-country,body.pdf-print-mode .runtime-print-report .c-status,body.pdf-print-mode .runtime-print-report .c-loops,body.pdf-print-mode .runtime-print-report .c-pb{text-align:center !important;}
-  body.pdf-print-mode .runtime-print-report .c-distance{text-align:right !important;font-weight:800 !important;}
-  body.pdf-print-mode .runtime-print-report .c-last,body.pdf-print-mode .runtime-print-report .c-best,body.pdf-print-mode .runtime-print-report .c-total{text-align:center !important;font-family:'Courier New',monospace !important;font-size:7.2pt !important;}
-  body.pdf-print-mode .runtime-print-report .c-pos{font-weight:900 !important;font-size:8.4pt !important;}
-  body.pdf-print-mode .runtime-print-report .c-loops{font-weight:900 !important;font-size:9pt !important;}
-  body.pdf-print-mode .runtime-print-report .runner-name{display:block !important;color:#111 !important;font-weight:900 !important;font-size:8.4pt !important;line-height:1.08 !important;white-space:normal !important;overflow:visible !important;text-overflow:clip !important;}
-  body.pdf-print-mode .runtime-print-report .runner-sub{display:block !important;color:#555 !important;font-size:6.2pt !important;line-height:1.08 !important;margin-top:.45mm !important;white-space:normal !important;overflow:visible !important;text-overflow:clip !important;}
-  body.pdf-print-mode .runtime-print-report .status-pill{display:inline-block !important;min-width:12mm !important;border:1px solid #777 !important;border-radius:999px !important;padding:.45mm 1mm !important;font-size:6pt !important;line-height:1 !important;font-weight:900 !important;letter-spacing:.04em !important;text-align:center !important;background:#fff !important;}
-  body.pdf-print-mode .runtime-print-report .st-run{color:#087a37 !important;border-color:#087a37 !important;background:#eef9f2 !important;}
-  body.pdf-print-mode .runtime-print-report .st-win{color:#806000 !important;border-color:#b98700 !important;background:#fff7d6 !important;}
-  body.pdf-print-mode .runtime-print-report .st-rtc{color:#0b5e92 !important;border-color:#0b5e92 !important;background:#eaf5ff !important;}
-  body.pdf-print-mode .runtime-print-report .st-dnc{color:#555 !important;border-color:#888 !important;background:#f0f0f0 !important;}
-  body.pdf-print-mode .runtime-print-report .st-over{color:#8d3c00 !important;border-color:#bb5200 !important;background:#fff0e5 !important;}
-  body.pdf-print-mode .runtime-print-report .st-dns{color:#555 !important;border-color:#888 !important;background:#eee !important;}
-  body.pdf-print-mode .runtime-print-report .st-dsq{color:#c00000 !important;border-color:#c00000 !important;background:#ffecec !important;}
-  body.pdf-print-mode .runtime-print-report .report-foot{display:flex !important;justify-content:space-between !important;gap:6mm !important;margin-top:2.5mm !important;padding-top:1.8mm !important;border-top:1px solid #cfcfcf !important;color:#666 !important;font-size:6.4pt !important;line-height:1.25 !important;}
-  body.pdf-print-mode .runtime-print-report .report-foot strong{color:#111 !important;}
-}
-
-
 </style>
 </head>
 <body>
@@ -1020,8 +731,8 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
   <div class="hdr-right">
     <div class="live-badge"><div class="live-dot"></div>LIVE</div>
     <div id="clock"><div id="clock-val">00:00:00</div><small id="clock-lbl">czas lokalny</small></div>
-    <button id="btn-pdf" class="hdr-btn" onclick="downloadPDF()" title="Pobierz / drukuj PDF">PDF</button>
-    <button id="btn-timeline" class="hdr-btn" onclick="toggleTimeline()" title="Pokaż / ukryj oś czasu">Oś czasu</button>
+    <button id="btn-pdf" class="hdr-btn" onclick="generateResultsPdf()" title="Pobierz wyniki PDF">PDF</button>
+<button id="btn-timeline" class="hdr-btn" onclick="toggleTimeline()" title="Pokaż / ukryj oś czasu">Oś czasu</button>
     <button id="btn-legend" class="hdr-btn" onclick="openStatusLegend()" title="Legenda statusów">Statusy</button>
     <button id="btn-lang" class="hdr-btn" onclick="toggleLang()" title="English view">EN</button>
     <button id="btn-fs" class="hdr-btn" onclick="toggleFS()" title="Pełny ekran">⛶</button>
@@ -1057,22 +768,6 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 </div>
 </div>
 
-<section class="print-report" id="print-report">
-  <div class="print-sheet">
-    <div class="print-main-head">
-      <img class="print-logo" id="print-logo" src="https://i.imgur.com/vxndlVH.jpeg" alt="Logo">
-      <div class="print-title-block">
-        <div class="print-kicker" id="print-kicker">WYNIKI ZAWODÓW</div>
-        <h1 id="print-title">Backyard Ultra Wiewióra Olecko</h1>
-        <div class="print-subline" id="print-subtitle">Wyniki zawodów</div>
-      </div>
-      <div class="print-side" id="print-side"></div>
-    </div>
-    <div class="print-summary" id="print-summary"></div>
-    <div class="print-table" id="print-table"></div>
-    <div class="print-footnote" id="print-footnote"></div>
-  </div>
-</section>
 
 <div class="twrap">
   <table>
@@ -1106,7 +801,6 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 </div>
 
 
-
 <!-- STATUS LEGEND MODAL -->
 <div class="overlay" id="legend-ov" onclick="closeLegend(event)">
   <div class="modal legend-modal">
@@ -1120,7 +814,6 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
     <div class="mbody" id="legend-body"></div>
   </div>
 </div>
-
 
 
 <!-- PRIVACY MODAL -->
@@ -1141,7 +834,7 @@ footer { text-align:center; padding:.5rem 1rem; font-size:.62rem; color:#444; le
 
 <script>
 /* =========================================================
-   OLECKO LIVE SCOREBOARD v7.38 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
+   OLECKO LIVE SCOREBOARD v7.43 — źródło: BU_PUBLIC_DATA > WYNIKI_HTML
    Do podmiany przed publikacją:
    1) CONFIG.csvUrl — link CSV opublikowanej zakładki WYNIKI_HTML
    2) metaCsvUrl opcjonalnie — domyślnie próbuje czytać META_HTML po nazwie arkusza
@@ -1195,7 +888,7 @@ const COL = {
 const I18N = {
   pl: {
     record:'Rekord:', loopNo:'Pętla nr:', starters:'Startujący:', active:'Aktywni:', dropped:'Odpadło:', refreshIn:'Odświeżanie za', sponsors:'Sponsorzy',
-    search:'Szukaj zawodnika…', pdf:'PDF', pdfTitle:'Pobierz / drukuj PDF', fsTitle:'Pełny ekran', langTitle:'English view',
+    search:'Szukaj zawodnika…', fsTitle:'Pełny ekran', langTitle:'English view', pdf:'PDF', pdfTitle:'Pobierz wyniki PDF', pdfPreparing:'Przygotowuję dokument PDF…', pdfStarted:'Pobieranie PDF rozpoczęte', pdfError:'Nie udało się wygenerować PDF.', pdfNoData:'Brak wyników do zapisania.', pdfOfficial:'OFICJALNE WYNIKI', pdfLive:'WYNIKI BIEŻĄCE', pdfClassification:'KLASYFIKACJA', pdfWinner:'Zwycięzca', pdfParticipants:'Startujący', pdfFinalLoop:'Pętla końcowa', pdfWinnerDistance:'Dystans zwycięzcy', pdfDataState:'Stan danych', pdfPage:'Strona',
     liveResults:'Wyniki na żywo', updated:'Aktualizacja:', localTime:'czas lokalny', raceTime:'czas zawodów', noResults:'Brak wyników',
     place:'#', bib:'Nr', runner:'Zawodnik', country:'Kraj', status:'Status', loops:'Pętle', distance:'Dystans', lastLap:'Ostatnia pętla', bestLap:'Najlepsza pętla', pb:'PB', toPb:'Do PB',
     completed:'ukończone', totalKm:'km łącznie', runnerData:'Dane zawodnika', lapTimes:'Czasy pętli', completedLaps:'ukończonych',
@@ -1205,7 +898,7 @@ const I18N = {
   },
   en: {
     record:'Record:', loopNo:'Loop no.:', starters:'Starters:', active:'Active:', dropped:'Out:', refreshIn:'Refresh in', sponsors:'Sponsors',
-    search:'Search runner…', pdf:'PDF', pdfTitle:'Download / print PDF', fsTitle:'Fullscreen', langTitle:'Widok PL',
+    search:'Search runner…', fsTitle:'Fullscreen', langTitle:'Widok PL', pdf:'PDF', pdfTitle:'Download results PDF', pdfPreparing:'Preparing PDF document…', pdfStarted:'PDF download started', pdfError:'Could not generate the PDF.', pdfNoData:'No results to save.', pdfOfficial:'OFFICIAL RESULTS', pdfLive:'LIVE RESULTS', pdfClassification:'CLASSIFICATION', pdfWinner:'Winner', pdfParticipants:'Starters', pdfFinalLoop:'Final loop', pdfWinnerDistance:'Winner distance', pdfDataState:'Data updated', pdfPage:'Page',
     liveResults:'Live results', updated:'Updated:', localTime:'local time', raceTime:'race time', noResults:'No results',
     place:'#', bib:'Bib', runner:'Runner', country:'Country', status:'Status', loops:'Loops', distance:'Distance', lastLap:'Last lap', bestLap:'Best lap', pb:'PB', toPb:'To PB',
     completed:'completed', totalKm:'total km', runnerData:'Runner data', lapTimes:'Lap times', completedLaps:'completed',
@@ -1889,7 +1582,6 @@ function openModal(row){
 }
 
 
-
 function updateLabels(){
   document.documentElement.lang = uiLang;
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -1903,8 +1595,8 @@ function updateLabels(){
   set('lbl-timeline', t('timeline'));
   set('lbl-timeline-current', t('currentLoop'));
   const srch = document.getElementById('srch'); if (srch) srch.placeholder = '🔍  ' + t('search');
-  const pdf = document.getElementById('btn-pdf'); if (pdf) { pdf.textContent = t('pdf'); pdf.title = t('pdfTitle'); }
-  const tl = document.getElementById('btn-timeline'); if (tl) { tl.textContent = uiLang === 'pl' ? 'Oś czasu' : 'Timeline'; tl.title = t('timelineTitle'); }
+const tl = document.getElementById('btn-timeline'); if (tl) { tl.textContent = uiLang === 'pl' ? 'Oś czasu' : 'Timeline'; tl.title = t('timelineTitle'); }
+  const pdfBtn = document.getElementById('btn-pdf'); if (pdfBtn) { pdfBtn.textContent = t('pdf'); pdfBtn.title = t('pdfTitle'); }
   const legendBtn = document.getElementById('btn-legend'); if (legendBtn) { legendBtn.textContent = t('statusLegend'); legendBtn.title = t('statusLegendTitle'); }
   const spc = document.getElementById('btn-spclose'); if (spc) spc.title = t('closeSponsors');
   const prv = document.getElementById('privacy-btn'); if (prv) prv.textContent = t('privacy');
@@ -1963,6 +1655,290 @@ function openStatusLegend(){
 function closeLegend(e){
   const ov = document.getElementById('legend-ov');
   if(e.target === ov) ov.classList.remove('open');
+}
+
+
+/* =========================================================
+   PDF RESULTS REPORT v1 — direct PDF download with pdfmake.
+   The file is generated independently from browser printing,
+   so it contains no browser URL, print date or browser headers.
+   ========================================================= */
+let pdfMakeLoadingPromise_ = null;
+
+function loadExternalScript_(url){
+  return new Promise((resolve, reject) => {
+    const existing = [...document.scripts].find(s => s.src === url);
+    if(existing){
+      if(existing.dataset.loaded === '1') return resolve();
+      existing.addEventListener('load', resolve, {once:true});
+      existing.addEventListener('error', () => reject(new Error('Script load failed')), {once:true});
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = url;
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.referrerPolicy = 'no-referrer';
+    script.addEventListener('load', () => { script.dataset.loaded = '1'; resolve(); }, {once:true});
+    script.addEventListener('error', () => reject(new Error('Script load failed: ' + url)), {once:true});
+    document.head.appendChild(script);
+  });
+}
+
+async function ensurePdfMake_(){
+  if(window.pdfMake && window.pdfMake.createPdf && window.pdfMake.vfs) return window.pdfMake;
+  if(pdfMakeLoadingPromise_) return pdfMakeLoadingPromise_;
+
+  const providers = [
+    {
+      core:'https://cdn.jsdelivr.net/npm/pdfmake@0.2.20/build/pdfmake.min.js',
+      fonts:'https://cdn.jsdelivr.net/npm/pdfmake@0.2.20/build/vfs_fonts.js'
+    },
+    {
+      core:'https://unpkg.com/pdfmake@0.2.20/build/pdfmake.min.js',
+      fonts:'https://unpkg.com/pdfmake@0.2.20/build/vfs_fonts.js'
+    }
+  ];
+
+  pdfMakeLoadingPromise_ = (async () => {
+    let lastError = null;
+    for(const provider of providers){
+      try{
+        if(!(window.pdfMake && window.pdfMake.createPdf)) await loadExternalScript_(provider.core);
+        if(!(window.pdfMake && window.pdfMake.vfs)) await loadExternalScript_(provider.fonts);
+        if(window.pdfMake && window.pdfMake.createPdf && window.pdfMake.vfs) return window.pdfMake;
+      }catch(error){
+        lastError = error;
+      }
+    }
+    throw lastError || new Error('pdfmake unavailable');
+  })();
+
+  try { return await pdfMakeLoadingPromise_; }
+  finally { pdfMakeLoadingPromise_ = null; }
+}
+
+function sanitizePdfFilename_(value){
+  const base = String(value || 'backyard-ultra')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '').slice(0, 80);
+  return `${base || 'backyard-ultra'}-${uiLang === 'en' ? 'results' : 'wyniki'}.pdf`;
+}
+
+function pdfStatusStyle_(status){
+  const s = String(status || 'RUN').toUpperCase();
+  const map = {
+    RUN:{color:'#008f4c', fill:'#e9f7ef'},
+    WIN:{color:'#8c5b00', fill:'#fff2cc'},
+    RTC:{color:'#b35a00', fill:'#fff0e3'},
+    DNC:{color:'#5d6670', fill:'#eef0f2'},
+    OVER:{color:'#b54200', fill:'#fff0e5'},
+    DNS:{color:'#60656b', fill:'#f0f1f2'},
+    DSQ:{color:'#b51425', fill:'#fde9ec'}
+  };
+  return map[s] || {color:'#3f4650', fill:'#f0f1f2'};
+}
+
+function pdfGender_(value){
+  const v = String(value || '').trim().toUpperCase();
+  if(['K','F','W','KOBIETA','FEMALE','WOMAN','♀','♀️'].includes(v)) return uiLang === 'en' ? 'F' : 'K';
+  if(['M','MĘŻCZYZNA','MEZCZYZNA','MALE','MAN','♂','♂️'].includes(v)) return 'M';
+  return '–';
+}
+
+function pdfSortedRows_(){
+  return [...rows].sort((a,b) => {
+    const pa = int(a._place || a[COL.place]);
+    const pb = int(b._place || b[COL.place]);
+    if(pa > 0 && pb > 0 && pa !== pb) return pa - pb;
+    return defaultLiveCompare(a,b);
+  });
+}
+
+function pdfRunnerCell_(row){
+  const sub = [row[COL.city], row[COL.team]].filter(Boolean).join(' · ');
+  const stack = [{text:String(row[COL.name] || '–'), bold:true, fontSize:8.2, color:'#101418'}];
+  if(sub) stack.push({text:sub, fontSize:6.4, color:'#6d7680', margin:[0,2,0,0]});
+  return {stack, margin:[0,1,0,1]};
+}
+
+function pdfResultRow_(row, index){
+  const status = String(row._status || row[COL.status] || 'RUN').toUpperCase();
+  const st = pdfStatusStyle_(status);
+  const female = isFemale(row);
+  const rowFill = female ? '#fff6f9' : (index % 2 ? '#fafbfc' : '#ffffff');
+  const cell = (text, options={}) => ({text:String(text ?? '–') || '–', fillColor:rowFill, margin:[0,3,0,3], ...options});
+  return [
+    cell(row._place || row[COL.place] || '–', {alignment:'center', bold:true}),
+    cell(row[COL.bib] || '–', {alignment:'center'}),
+    {...pdfRunnerCell_(row), fillColor:rowFill},
+    cell(pdfGender_(row[COL.gender]), {alignment:'center'}),
+    cell(row[COL.country] || '–', {alignment:'center'}),
+    {text:status, color:st.color, fillColor:st.fill, bold:true, alignment:'center', margin:[1,3,1,3]},
+    cell(row._loops || int(row[COL.loops]) || 0, {alignment:'center', bold:true, fontSize:9}),
+    cell(`${formatKm(row._distance)} km`, {alignment:'right', bold:true}),
+    cell(formatDuration(row[COL.lastLap]) || '–', {alignment:'center'}),
+    cell(formatDuration(row[COL.bestLap]) || '–', {alignment:'center'}),
+    cell(formatDuration(row[COL.totalTime]) || '–', {alignment:'center'})
+  ];
+}
+
+function pdfLegendText_(){
+  if(uiLang === 'en') return 'WIN – winner   ·   RTC – completed the last loop but did not continue   ·   DNC – loop not completed   ·   OVER – over 60 minutes   ·   DNS – did not start   ·   DSQ – disqualified';
+  return 'WIN – zwycięzca   ·   RTC – ukończył ostatnią pętlę, ale nie kontynuował   ·   DNC – nie ukończył pętli   ·   OVER – po limicie 60 minut   ·   DNS – nie wystartował   ·   DSQ – dyskwalifikacja';
+}
+
+async function imageUrlToDataUrl_(url){
+  if(!url) return '';
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 4500);
+  try{
+    const response = await fetch(url, {mode:'cors', cache:'force-cache', signal:controller.signal});
+    if(!response.ok) return '';
+    const blob = await response.blob();
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }catch(_){ return ''; }
+  finally{ clearTimeout(timer); }
+}
+
+function pdfSummaryCard_(label, value, accent){
+  return {
+    table:{
+      widths:['*'],
+      body:[[
+        {
+          stack:[
+            {text:label.toUpperCase(), fontSize:6.2, bold:true, color:'#737b84', characterSpacing:.45},
+            {text:String(value || '–'), fontSize:12, bold:true, color:accent || '#101418', margin:[0,3,0,0]}
+          ],
+          margin:[9,7,9,7], fillColor:'#f5f6f7'
+        }
+      ]]
+    },
+    layout:{hLineWidth:()=>0, vLineWidth:()=>0}
+  };
+}
+
+async function generateResultsPdf(){
+  const button = document.getElementById('btn-pdf');
+  if(!rows.length){ toast(t('pdfNoData')); return; }
+  if(button && button.disabled) return;
+
+  if(button){ button.disabled = true; button.style.opacity = '.55'; }
+  toast(t('pdfPreparing'), 5000);
+
+  try{
+    const pdfMake = await ensurePdfMake_();
+    const data = pdfSortedRows_();
+    const finished = isRaceFinished_();
+    const winner = getWinnerRow_();
+    const eventName = CONFIG.eventNameOverride || meta.eventName || document.querySelector('.hdr-name')?.textContent || 'Backyard Ultra';
+    const eventSubtitle = (uiLang === 'en' ? (CONFIG.eventSubtitleOverrideEn || CONFIG.eventSubtitleOverride) : CONFIG.eventSubtitleOverride) || meta.eventSubtitle || '';
+    const startCount = data.filter(r => String(r._status || '').toUpperCase() !== 'DNS').length;
+    const finalLoop = getDisplayLoop_() || Math.max(0, ...data.map(r => r._loops || 0));
+    const winnerDistance = winner ? `${formatKm(winner._distance)} km` : '–';
+    const updateText = formatDateTime(meta.lastUpdate) || '–';
+    const logoData = await imageUrlToDataUrl_(CONFIG.logoUrl);
+    const reportLabel = finished ? t('pdfOfficial') : t('pdfLive');
+
+    const tableHeader = [
+      uiLang === 'en' ? 'PLACE' : 'MSC.',
+      uiLang === 'en' ? 'BIB' : 'NR',
+      uiLang === 'en' ? 'RUNNER' : 'ZAWODNIK',
+      uiLang === 'en' ? 'SEX' : 'PŁEĆ',
+      uiLang === 'en' ? 'COUNTRY' : 'KRAJ',
+      'STATUS',
+      uiLang === 'en' ? 'LAPS' : 'PĘTLE',
+      uiLang === 'en' ? 'DISTANCE' : 'DYSTANS',
+      uiLang === 'en' ? 'LAST LAP' : 'OSTATNIA',
+      uiLang === 'en' ? 'BEST LAP' : 'NAJLEPSZA',
+      uiLang === 'en' ? 'TOTAL TIME' : 'SUMA CZASÓW'
+    ].map(text => ({text, bold:true, color:'#ffffff', fontSize:6.4, alignment:'center', margin:[1,5,1,5]}));
+
+    const summaryWinner = winner ? String(winner[COL.name] || '–') : '–';
+    const body = [tableHeader, ...data.map(pdfResultRow_)];
+    const content = [];
+
+    const titleStack = [
+      {text:reportLabel, fontSize:7.2, bold:true, color:'#ff7a18', characterSpacing:1.5, margin:[0,0,0,4]},
+      {text:eventName, fontSize:19, bold:true, color:'#101418', margin:[0,0,0,3]},
+      ...(eventSubtitle ? [{text:eventSubtitle, fontSize:8.4, color:'#606973'}] : [])
+    ];
+
+    content.push({
+      columns:[
+        logoData ? {image:logoData, fit:[58,58], width:68, alignment:'left'} : {width:8, text:''},
+        {width:'*', stack:titleStack, margin:[logoData ? 6 : 0, 0, 0, 0]},
+        {width:145, stack:[
+          {text:t('pdfDataState').toUpperCase(), fontSize:6.2, bold:true, color:'#7a828b', alignment:'right', characterSpacing:.5},
+          {text:updateText, fontSize:8.3, bold:true, color:'#20252a', alignment:'right', margin:[0,4,0,0]}
+        ]}
+      ],
+      columnGap:8
+    });
+    content.push({canvas:[{type:'line', x1:0, y1:0, x2:793, y2:0, lineWidth:2.2, lineColor:'#ff7a18'}], margin:[0,10,0,10]});
+    content.push({
+      columns:[
+        pdfSummaryCard_(t('pdfWinner'), summaryWinner, '#8c5b00'),
+        pdfSummaryCard_(t('pdfParticipants'), startCount, '#101418'),
+        pdfSummaryCard_(t('pdfFinalLoop'), finalLoop || '–', '#ff6a00'),
+        pdfSummaryCard_(t('pdfWinnerDistance'), winnerDistance, '#101418')
+      ],
+      columnGap:7,
+      margin:[0,0,0,12]
+    });
+    content.push({text:t('pdfClassification'), fontSize:9, bold:true, color:'#101418', characterSpacing:1.1, margin:[0,0,0,6]});
+    content.push({
+      table:{
+        headerRows:1,
+        widths:[27,30,'*',29,38,43,31,55,52,52,56],
+        body
+      },
+      layout:{
+        fillColor:(rowIndex) => rowIndex === 0 ? '#171a1d' : null,
+        hLineColor:(i) => i === 0 || i === 1 ? '#171a1d' : '#d7dadd',
+        vLineColor:() => '#e2e4e6',
+        hLineWidth:(i) => i === 0 || i === 1 ? 1 : .45,
+        vLineWidth:() => .35,
+        paddingLeft:() => 4,
+        paddingRight:() => 4,
+        paddingTop:() => 1,
+        paddingBottom:() => 1
+      },
+      dontBreakRows:true
+    });
+    content.push({text:pdfLegendText_(), fontSize:6.2, color:'#666e77', margin:[0,9,0,0], lineHeight:1.3});
+
+    const docDefinition = {
+      pageSize:'A4',
+      pageOrientation:'landscape',
+      pageMargins:[24,22,24,30],
+      info:{title:`${eventName} — ${uiLang === 'en' ? 'results' : 'wyniki'}`, subject:reportLabel, author:eventName},
+      content,
+      footer:(currentPage, pageCount) => ({
+        margin:[24,0,24,8],
+        columns:[
+          {text:`${eventName} · ${reportLabel}`, fontSize:6.5, color:'#7a828b'},
+          {text:`${t('pdfPage')} ${currentPage} / ${pageCount}`, fontSize:6.5, color:'#7a828b', alignment:'right'}
+        ]
+      }),
+      defaultStyle:{font:'Roboto', fontSize:7.2, color:'#20252a'}
+    };
+
+    pdfMake.createPdf(docDefinition).download(sanitizePdfFilename_(eventName));
+    toast(t('pdfStarted'));
+  }catch(error){
+    console.error('PDF generation error:', error);
+    toast(t('pdfError'), 4000);
+  }finally{
+    if(button){ button.disabled = false; button.style.opacity = ''; }
+  }
 }
 
 
@@ -2027,266 +2003,7 @@ function toggleLang(){
   uiLang = uiLang === 'pl' ? 'en' : 'pl';
   updateLabels(); applyMeta(meta); buildTimeline(); buildHead(); render(); updateRaceClock(); if(document.getElementById('legend-ov')?.classList.contains('open')) openStatusLegend();
 }
-function preparePrintReport(){
-  const eventName = CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra';
-  const subtitle = meta.eventSubtitle || CONFIG.eventSubtitleOverride || 'Wyniki zawodów';
-  const updated = formatDateTime(meta.lastUpdate) || new Date().toLocaleString(uiLang === 'en' ? 'en-GB' : 'pl-PL');
-  const activeLoop = getDisplayLoop_() || '–';
 
-  const logoEl = document.getElementById('print-logo');
-  const kickerEl = document.getElementById('print-kicker');
-  const titleEl = document.getElementById('print-title');
-  const subEl = document.getElementById('print-subtitle');
-  const sideEl = document.getElementById('print-side');
-  const footEl = document.getElementById('print-footnote');
-
-  if(logoEl) logoEl.src = CONFIG.logoUrl || '';
-  if(kickerEl) kickerEl.textContent = uiLang === 'en' ? 'RACE RESULTS' : 'WYNIKI ZAWODÓW';
-  if(titleEl) titleEl.textContent = eventName;
-  if(subEl) subEl.textContent = subtitle;
-
-  const sideRows = uiLang === 'en'
-    ? [['Report', 'Live classification'], ['Updated', updated], ['Loop', activeLoop || '–'], ['Distance', `${formatKm(meta.lapDistance || CONFIG.kmPerLoopFallback)} km / loop`]]
-    : [['Raport', 'Klasyfikacja live'], ['Aktualizacja', updated], ['Pętla', activeLoop || '–'], ['Dystans', `${formatKm(meta.lapDistance || CONFIG.kmPerLoopFallback)} km / pętla`]];
-
-  if(sideEl){
-    sideEl.innerHTML = sideRows.map(([k,v]) => `<div class="side-row"><span class="side-k">${esc(k)}</span><span class="side-v">${esc(v)}</span></div>`).join('');
-  }
-  if(footEl){
-    footEl.innerHTML = uiLang === 'en'
-      ? `<span><strong>Status:</strong> RUN = still racing, RTC/DNC/OVER/DSQ = not active. Completed loops shown in the table remain visible.</span><span>Generated from live data.</span>`
-      : `<span><strong>Statusy:</strong> RUN = zawodnik nadal biegnie, RTC/DNC/OVER/DSQ = zawodnik nie jest już aktywny. Ukończone pętle pozostają widoczne.</span><span>Wygenerowano z danych live.</span>`;
-  }
-
-  buildPrintSummary(activeLoop);
-  buildPrintTable();
-}
-
-function buildPrintSummary(activeLoop){
-  const el = document.getElementById('print-summary');
-  if(!el) return;
-  const starters = rows.filter(r => r._status !== 'DNS').length;
-  const active = rows.filter(r => r._status === 'RUN').length;
-  const out = rows.filter(r => ['RTC','DNC','OVER','DSQ'].includes(r._status)).length;
-  const maxLoop = rows.length ? Math.max(...rows.map(r => r._loops || 0)) : 0;
-  const totalKm = rows.reduce((sum,r) => sum + (Number(r._distance) || 0), 0);
-
-  const cards = uiLang === 'en'
-    ? [['Current loop', activeLoop || '–'], ['Max completed', maxLoop], ['Starters', starters], ['Active', active], ['Total distance', `${formatKm(totalKm)} km`]]
-    : [['Aktualna pętla', activeLoop || '–'], ['Najwięcej pętli', maxLoop], ['Startujący', starters], ['Aktywni', active], ['Suma dystansu', `${formatKm(totalKm)} km`]];
-
-  el.innerHTML = cards.map(([k,v]) => `<div class="ps-card"><span class="ps-k">${esc(k)}</span><span class="ps-v">${esc(v)}</span></div>`).join('');
-}
-
-function buildPrintTable(){
-  const el = document.getElementById('print-table');
-  if(!el) return;
-  const data = [...rows].sort(defaultLiveCompare);
-
-  const headers = uiLang === 'en'
-    ? ['Pos.', 'Bib', 'Runner', 'Sex', 'Country', 'Status', 'Loops', 'Distance', 'Last lap', 'Best lap', 'Worst lap', 'Total', 'PB']
-    : ['Msc.', 'Nr', 'Zawodnik', 'Płeć', 'Kraj', 'Status', 'Pętle', 'Dystans', 'Ostatnia', 'Najlepsza', 'Najgorsza', 'Suma', 'PB'];
-
-  const head = `<thead><tr>
-    <th class="p-pos">${esc(headers[0])}</th>
-    <th class="p-bib">${esc(headers[1])}</th>
-    <th class="p-name">${esc(headers[2])}</th>
-    <th class="p-gender">${esc(headers[3])}</th>
-    <th class="p-country">${esc(headers[4])}</th>
-    <th class="p-status">${esc(headers[5])}</th>
-    <th class="p-loops">${esc(headers[6])}</th>
-    <th class="p-distance">${esc(headers[7])}</th>
-    <th class="p-time">${esc(headers[8])}</th>
-    <th class="p-time">${esc(headers[9])}</th>
-    <th class="p-time">${esc(headers[10])}</th>
-    <th class="p-total">${esc(headers[11])}</th>
-    <th class="p-pb">${esc(headers[12])}</th>
-  </tr></thead>`;
-
-  const body = data.map(r => {
-    const sub = [r[COL.city], r[COL.team]].filter(Boolean).join(' · ');
-    const status = String(r._status || r[COL.status] || '').toUpperCase();
-    const gender = formatGender(r[COL.gender]);
-    const genderShort = uiLang === 'en'
-      ? (String(gender).toLowerCase().startsWith('female') ? 'F' : String(gender).toLowerCase().startsWith('male') ? 'M' : gender || '–')
-      : (String(gender).toLowerCase().startsWith('kob') ? 'K' : String(gender).toLowerCase().startsWith('męż') ? 'M' : gender || '–');
-    const pb = formatPB(r);
-    return `<tr>
-      <td class="p-pos">${esc(r._place || '–')}</td>
-      <td class="p-bib">${esc(r[COL.bib] || '–')}</td>
-      <td class="p-name"><span class="p-name-main">${esc(r[COL.name] || '–')}</span>${sub ? `<span class="p-name-sub">${esc(sub)}</span>` : ''}</td>
-      <td class="p-gender">${esc(genderShort)}</td>
-      <td class="p-country">${esc((r[COL.country] || '').toString().toUpperCase() || '–')}</td>
-      <td class="p-status"><span class="p-status-badge p-status-${esc(status.toLowerCase())}">${esc(status || '–')}</span></td>
-      <td class="p-loops">${esc(r._loops || 0)}</td>
-      <td class="p-distance">${esc(formatKm(r._distance))} km</td>
-      <td class="p-time">${esc(formatDuration(r[COL.lastLap]) || '–')}</td>
-      <td class="p-time">${esc(formatDuration(r[COL.bestLap]) || '–')}</td>
-      <td class="p-time">${esc(formatDuration(r[COL.worstLap]) || '–')}</td>
-      <td class="p-total">${esc(formatDuration(r[COL.totalTime]) || '–')}</td>
-      <td class="p-pb">${esc(pb || '–')}</td>
-    </tr>`;
-  }).join('');
-
-  el.innerHTML = `<table>${head}<tbody>${body}</tbody></table>`;
-}
-
-function formatPB(r){
-  const direct = String(r[COL.pb] || '').trim();
-  if(direct) return direct;
-  const toPb = Number(String(r[COL.toPb] || '').replace(',', '.'));
-  const loops = Number(r._loops || r[COL.loops] || 0);
-  if(Number.isFinite(toPb) && toPb > 0 && Number.isFinite(loops)) return String(Math.max(0, loops + toPb - 1));
-  return '';
-}
-
-function durationToSec(v){
-  const txt = formatDuration(v);
-  const m = String(txt || '').match(/^(\d+):(\d{2}):(\d{2})$/);
-  if(!m) return 0;
-  return Number(m[1])*3600 + Number(m[2])*60 + Number(m[3]);
-}
-function buildStandalonePrintReport(){
-  const eventName = CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra';
-  const subtitle = meta.eventSubtitle || CONFIG.eventSubtitleOverride || 'Wyniki zawodów';
-  const updated = formatDateTime(meta.lastUpdate) || new Date().toLocaleString(uiLang === 'en' ? 'en-GB' : 'pl-PL');
-  const activeLoop = getDisplayLoop_() || '–';
-  const starters = rows.filter(r => r._status !== 'DNS').length;
-  const active = rows.filter(r => r._status === 'RUN').length;
-  const out = rows.filter(r => ['RTC','DNC','OVER','DSQ'].includes(r._status)).length;
-  const maxLoop = rows.length ? Math.max(...rows.map(r => r._loops || 0)) : 0;
-  const totalKm = rows.reduce((sum,r) => sum + (Number(r._distance) || 0), 0);
-  const data = [...rows].sort(defaultLiveCompare);
-  const labels = uiLang === 'en' ? {
-    kicker:'Race results', report:'Classification', updated:'Updated', loop:'Loop', lapDistance:'Lap distance', max:'Best result', starters:'Starters', active:'Active', out:'Out', totalKm:'Total distance',
-    cols:['Pos.','Bib','Runner','Sex','Country','Status','Loops','Distance','Last lap','Best lap','Total','PB'],
-    foot:'RUN = still racing. RTC/DNC/OVER/DSQ = not active. Completed loops remain visible.'
-  } : {
-    kicker:'Wyniki zawodów', report:'Klasyfikacja zawodów', updated:'Aktualizacja', loop:'Pętla', lapDistance:'Dystans pętli', max:'Najlepszy wynik', starters:'Startujący', active:'Aktywni', out:'Odpadło', totalKm:'Suma dystansu',
-    cols:['Msc.','Nr','Zawodnik','Płeć','Kraj','Status','Pętle','Dystans','Ostatnia','Najlepsza','Suma','PB'],
-    foot:'RUN = zawodnik nadal biegnie. RTC/DNC/OVER/DSQ = zawodnik nie jest już aktywny. Ukończone pętle pozostają widoczne.'
-  };
-  const summary = [
-    [labels.loop, activeLoop || '–'],
-    [labels.max, maxLoop],
-    [labels.starters, starters],
-    [labels.active, active],
-    [labels.out, out],
-    [labels.totalKm, `${formatKm(totalKm)} km`]
-  ];
-  const colWidths = ['9mm','10mm','61mm','8mm','13mm','17mm','12mm','20mm','20mm','20mm','20mm','10mm'];
-  const colGroup = `<colgroup>${colWidths.map(w => `<col style="width:${w}">`).join('')}</colgroup>`;
-  const rowsHtml = data.map(r => {
-    const sub = [r[COL.city], r[COL.team]].filter(Boolean).join(' · ');
-    const status = String(r._status || r[COL.status] || '').toUpperCase();
-    const gender = formatGender(r[COL.gender]);
-    const genderShort = uiLang === 'en'
-      ? (String(gender).toLowerCase().startsWith('female') ? 'F' : String(gender).toLowerCase().startsWith('male') ? 'M' : gender || '–')
-      : (String(gender).toLowerCase().startsWith('kob') ? 'K' : String(gender).toLowerCase().startsWith('męż') ? 'M' : gender || '–');
-    const pb = formatPB(r) || '–';
-    return `<tr>
-      <td class="c-pos">${esc(r._place || '–')}</td>
-      <td class="c-bib">${esc(r[COL.bib] || '–')}</td>
-      <td><span class="runner-name">${esc(r[COL.name] || '–')}</span>${sub ? `<span class="runner-sub">${esc(sub)}</span>` : ''}</td>
-      <td class="c-sex">${esc(genderShort)}</td>
-      <td class="c-country">${esc((r[COL.country] || '').toString().toUpperCase() || '–')}</td>
-      <td class="c-status"><span class="status-pill st-${esc(status.toLowerCase())}">${esc(status || '–')}</span></td>
-      <td class="c-loops">${esc(r._loops || 0)}</td>
-      <td class="c-distance">${esc(formatKm(r._distance))} km</td>
-      <td class="c-last">${esc(formatDuration(r[COL.lastLap]) || '–')}</td>
-      <td class="c-best">${esc(formatDuration(r[COL.bestLap]) || '–')}</td>
-      <td class="c-total">${esc(formatDuration(r[COL.totalTime]) || '–')}</td>
-      <td class="c-pb">${esc(pb)}</td>
-    </tr>`;
-  }).join('');
-  const summaryHtml = summary.map(([k,v]) => `<div><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');
-  const th = labels.cols.map(c => `<th>${esc(c)}</th>`).join('');
-  return `<main class="sheet">
-    <header class="report-top">
-      <img class="report-logo" src="${esc(CONFIG.logoUrl || '')}" alt="Logo">
-      <div><div class="report-kicker">${esc(labels.kicker)}</div><h1>${esc(eventName)}</h1><div class="report-subtitle">${esc(subtitle)}</div></div>
-      <div class="report-meta"><div><span>${esc(labels.updated)}</span><strong>${esc(updated)}</strong></div><div><span>${esc(labels.loop)}</span><strong>${esc(activeLoop || '–')}</strong></div><div><span>${esc(labels.lapDistance)}</span><strong>${esc(formatKm(meta.lapDistance || meta.lapDistanceKm || CONFIG.kmPerLoopFallback))} km</strong></div></div>
-    </header>
-    <section class="report-strip">${summaryHtml}</section>
-    <h2 class="report-section-title">${esc(labels.report)}</h2>
-    <table class="report-table">${colGroup}<thead><tr>${th}</tr></thead><tbody>${rowsHtml}</tbody></table>
-    <footer class="report-foot"><span><strong>Statusy:</strong> ${esc(labels.foot)}</span><span>${esc(uiLang === 'en' ? 'Generated from live data.' : 'Wygenerowano z danych live.')}</span></footer>
-  </main>`;
-}
-
-function downloadPDF(){
-  if(!rows.length){
-    toast(uiLang === 'pl' ? 'Brak danych do PDF' : 'No data for PDF');
-    return;
-  }
-
-  let cleanupTimer = null;
-  const cleanup = () => {
-    document.body.classList.remove('pdf-print-mode');
-    if(cleanupTimer) clearTimeout(cleanupTimer);
-  };
-
-  try {
-    let host = document.getElementById('runtime-print-report');
-    if(!host){
-      host = document.createElement('section');
-      host.id = 'runtime-print-report';
-      host.className = 'runtime-print-report';
-      document.body.appendChild(host);
-    }
-
-    let reportBody = '';
-    try {
-      const full = buildStandalonePrintReport();
-      const parsed = new DOMParser().parseFromString(full, 'text/html');
-      const sheet = parsed.querySelector('.sheet');
-      reportBody = sheet ? sheet.outerHTML : '';
-    } catch(reportErr){
-      console.warn('Standalone report failed, using fallback report.', reportErr);
-      reportBody = buildFallbackPrintReport_();
-    }
-
-    host.innerHTML = reportBody || buildFallbackPrintReport_();
-    document.body.classList.add('pdf-print-mode');
-    toast(uiLang === 'pl' ? 'Otwieram zapis PDF…' : 'Opening PDF save…');
-
-    window.addEventListener('afterprint', cleanup, { once:true });
-    cleanupTimer = setTimeout(cleanup, 7000);
-
-    setTimeout(() => {
-      try { window.print(); }
-      catch(printErr){ console.error(printErr); cleanup(); toast(uiLang === 'pl' ? 'Nie udało się otworzyć drukowania' : 'Could not open print dialog'); }
-    }, 80);
-  } catch(e){
-    console.error(e);
-    cleanup();
-    toast(uiLang === 'pl' ? 'Nie udało się przygotować PDF' : 'Could not prepare PDF');
-  }
-}
-
-function buildFallbackPrintReport_(){
-  const eventName = esc(CONFIG.eventNameOverride || meta.eventName || 'Backyard Ultra');
-  const subtitle = esc(meta.eventSubtitle || CONFIG.eventSubtitleOverride || 'Wyniki zawodów');
-  const data = [...rows].sort(defaultLiveCompare);
-  const cols = uiLang === 'en'
-    ? ['Pos.','Bib','Runner','Status','Loops','Distance','Last lap','Best lap']
-    : ['Msc.','Nr','Zawodnik','Status','Pętle','Dystans','Ostatnia','Najlepsza'];
-  const body = data.map(r => {
-    const status = String(r._status || r[COL.status] || '').toUpperCase();
-    const sub = [r[COL.city], r[COL.team]].filter(Boolean).join(' · ');
-    return `<tr>
-      <td class="pos">${esc(r._place || '–')}</td>
-      <td class="bib">${esc(r[COL.bib] || '–')}</td>
-      <td class="runner"><strong>${esc(r[COL.name] || '–')}</strong>${sub ? `<small>${esc(sub)}</small>` : ''}</td>
-      <td class="center"><span class="badge ${esc(status.toLowerCase())}">${esc(status || '–')}</span></td>
-      <td class="loops">${esc(r._loops || 0)}</td>
-      <td class="num">${esc(formatKm(r._distance))} km</td>
-      <td class="time">${esc(formatDuration(r[COL.lastLap]) || '–')}</td>
-      <td class="time">${esc(formatDuration(r[COL.bestLap]) || '–')}</td>
-    </tr>`;
-  }).join('');
-  return `<main class="sheet"><header class="top"><img class="logo" src="${esc(CONFIG.logoUrl || '')}"><div><div class="kicker">${uiLang === 'en' ? 'Race results' : 'Wyniki zawodów'}</div><h1>${eventName}</h1><div class="subtitle">${subtitle}</div></div><div class="side"><div><span>${uiLang === 'en' ? 'Updated' : 'Aktualizacja'}</span><strong>${esc(formatDateTime(meta.lastUpdate) || '')}</strong></div><div><span>${uiLang === 'en' ? 'Loop' : 'Pętla'}</span><strong>${esc(getDisplayLoop_() || '–')}</strong></div></div></header><h2 class="result-title">${uiLang === 'en' ? 'Race classification' : 'Klasyfikacja zawodów'}</h2><table><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table><footer class="foot"><span>${uiLang === 'en' ? 'Generated from live data.' : 'Wygenerowano z danych live.'}</span></footer></main>`;
-}
 function setStickyTop(){
   const top = document.querySelector('.live-top');
   const h = top ? Math.ceil(top.getBoundingClientRect().bottom) : 0;
